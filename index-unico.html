@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#092b4c">
+  <meta name="description" content="Calculadora educativa de IMC por idade e sexo para crianças e adolescentes, baseada nas curvas da OMS.">
+  <title>O Peso da Estatística na Saúde — versão offline</title>
+  <style>
+:root {
+  --navy-950: #061c31;
+  --navy-900: #092b4c;
+  --navy-800: #0b3a62;
+  --blue-600: #1677d2;
+  --blue-500: #2c91e9;
+  --blue-100: #dff1ff;
+  --green-600: #169b78;
+  --green-100: #ddf6ee;
+  --yellow-400: #f5c84b;
+  --yellow-100: #fff4cb;
+  --purple-500: #7658d6;
+  --ink: #153047;
+  --muted: #5d7284;
+  --line: #d8e3eb;
+  --surface: #f5f9fc;
+  --white: #fff;
+  --danger: #bc3e4d;
+  --shadow: 0 24px 70px rgba(7, 43, 76, .14);
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --focus: 0 0 0 4px rgba(44, 145, 233, .28);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-family: Inter, Aptos, "Segoe UI", Arial, sans-serif; line-height: 1.55; }
+button, input, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+a { color: inherit; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.skip-link { position: fixed; top: 10px; left: 10px; z-index: 1000; padding: 12px 18px; border-radius: 10px; color: var(--white); background: var(--navy-950); transform: translateY(-150%); }
+.skip-link:focus { transform: translateY(0); }
+:focus-visible { outline: none; box-shadow: var(--focus); }
+
+.site-header { position: absolute; z-index: 20; width: 100%; color: var(--white); }
+.header-inner { width: min(1180px, calc(100% - 40px)); min-height: 92px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { display: inline-flex; gap: 13px; align-items: center; text-decoration: none; }
+.brand-mark { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.35); border-radius: 13px; color: var(--yellow-400); background: rgba(255,255,255,.1); font-family: Georgia, serif; font-size: 25px; }
+.brand strong, .brand small { display: block; }
+.brand strong { font-size: 16px; letter-spacing: .02em; }
+.brand small { margin-top: 1px; color: #b9d3e8; font-size: 12px; }
+.presentation-button { min-height: 44px; padding: 0 17px; border: 1px solid rgba(255,255,255,.28); border-radius: 12px; color: var(--white); background: rgba(255,255,255,.09); backdrop-filter: blur(8px); font-weight: 700; }
+.presentation-button:hover { background: rgba(255,255,255,.17); }
+
+.hero { position: relative; overflow: hidden; min-height: 680px; color: var(--white); background: radial-gradient(circle at 75% 48%, rgba(44,145,233,.28), transparent 27%), linear-gradient(125deg, var(--navy-950), var(--navy-900) 58%, #074c63); }
+.hero::before { content: ""; position: absolute; inset: 0; opacity: .13; background-image: linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px); background-size: 48px 48px; mask-image: linear-gradient(90deg, transparent, #000 30%, #000); }
+.hero::after { content: "Σ  x²  +  −  %  σ"; position: absolute; right: -20px; bottom: -5px; color: rgba(255,255,255,.035); font-family: Georgia, serif; font-weight: 700; font-size: clamp(70px, 11vw, 160px); letter-spacing: .15em; white-space: nowrap; }
+.hero-shape { position: absolute; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; }
+.hero-shape-one { width: 420px; height: 420px; top: -230px; left: 32%; }
+.hero-shape-two { width: 230px; height: 230px; right: 5%; bottom: -120px; }
+.hero-inner { position: relative; z-index: 2; width: min(1180px, calc(100% - 40px)); min-height: 680px; margin: auto; padding: 130px 0 90px; display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 76px; }
+.eyebrow { margin: 0 0 18px; display: flex; align-items: center; gap: 11px; color: #9fcae8; text-transform: uppercase; letter-spacing: .15em; font-size: 12px; font-weight: 800; }
+.eyebrow span { width: 31px; height: 2px; background: var(--yellow-400); }
+.eyebrow.dark { color: var(--blue-600); }
+.hero h1 { max-width: 720px; margin: 0; font-size: clamp(46px, 5.3vw, 76px); line-height: .99; letter-spacing: -.045em; }
+.hero h1 em { position: relative; color: var(--yellow-400); font-family: Georgia, "Times New Roman", serif; font-weight: 500; }
+.hero h1 em::after { content: ""; position: absolute; left: 2%; right: 0; bottom: -4px; height: 3px; border-radius: 5px; background: var(--yellow-400); transform: rotate(-1deg); }
+.hero-subtitle { margin: 30px 0 8px; color: #e5f4ff; font-size: clamp(19px, 2vw, 24px); font-weight: 700; }
+.hero-description { max-width: 590px; margin: 0; color: #b9d3e8; font-size: 17px; }
+.hero-cta { width: fit-content; margin-top: 30px; padding: 14px 20px; display: inline-flex; align-items: center; gap: 16px; border-radius: 12px; color: var(--navy-950); background: var(--yellow-400); text-decoration: none; font-weight: 800; box-shadow: 0 12px 30px rgba(245,200,75,.18); }
+.hero-cta:hover { transform: translateY(-2px); }
+
+.hero-visual { position: relative; max-width: 500px; margin-left: auto; }
+.visual-card { position: relative; padding: 28px; border: 1px solid rgba(255,255,255,.22); border-radius: 30px; background: linear-gradient(155deg, rgba(255,255,255,.16), rgba(255,255,255,.07)); box-shadow: 0 30px 90px rgba(0,0,0,.25); backdrop-filter: blur(12px); transform: rotate(2deg); }
+.visual-topline { display: flex; justify-content: space-between; gap: 16px; color: #dff1ff; font-size: 13px; font-weight: 800; }
+.live-dot { color: #b8f0dc; }
+.live-dot::before { content: ""; width: 7px; height: 7px; display: inline-block; margin-right: 7px; border-radius: 50%; background: #5bd2ad; box-shadow: 0 0 0 5px rgba(91,210,173,.15); }
+.chart { position: relative; height: 230px; margin: 27px 0 23px; padding: 0 18px; display: flex; align-items: flex-end; justify-content: space-around; gap: 16px; border-left: 1px solid rgba(255,255,255,.19); border-bottom: 1px solid rgba(255,255,255,.19); }
+.chart::before, .chart::after { content: ""; position: absolute; left: 0; right: 0; height: 1px; background: rgba(255,255,255,.09); }
+.chart::before { top: 33%; } .chart::after { top: 66%; }
+.chart > span { width: 12%; height: var(--h); border-radius: 8px 8px 2px 2px; background: linear-gradient(#68baf6, #2077bd); }
+.chart > span:nth-of-type(4) { background: linear-gradient(#f7d56f, #d9a81b); }
+.chart-curve { position: absolute; left: 4%; top: 28%; width: 90%; height: 45%; border-top: 3px solid #74d9b8; border-radius: 50%; transform: rotate(-9deg); }
+.plot-dot { position: absolute; width: 11px; height: 11px; border: 3px solid var(--white); border-radius: 50%; background: var(--purple-500); }
+.dot-one { left: 22%; top: 41%; } .dot-two { left: 52%; top: 35%; } .dot-three { right: 14%; top: 18%; }
+.visual-formula { padding: 18px 20px; border-radius: 17px; color: var(--navy-950); background: rgba(255,255,255,.94); }
+.visual-formula small, .visual-formula strong { display: block; }
+.visual-formula small { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .09em; }
+.visual-formula strong { margin-top: 5px; font-family: Georgia, serif; font-size: 25px; }
+.floating-symbol { position: absolute; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.2); border-radius: 14px; color: var(--white); background: rgba(15,79,112,.85); box-shadow: 0 15px 25px rgba(0,0,0,.18); font-family: Georgia, serif; font-weight: 800; }
+.symbol-one { width: 62px; height: 62px; top: -30px; right: 35px; transform: rotate(-7deg); }
+.symbol-two { width: 55px; height: 55px; left: -32px; bottom: 70px; color: var(--navy-950); background: var(--yellow-400); transform: rotate(8deg); }
+.symbol-three { width: 70px; height: 48px; right: -36px; bottom: 35px; background: var(--purple-500); transform: rotate(-4deg); }
+
+.education-strip { position: relative; z-index: 4; margin-top: -38px; }
+.education-grid { width: min(1060px, calc(100% - 40px)); margin: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.education-card { position: relative; min-height: 128px; padding: 25px; display: flex; align-items: center; gap: 18px; overflow: hidden; border: 1px solid rgba(216,227,235,.8); border-radius: var(--radius-md); background: var(--white); box-shadow: 0 16px 45px rgba(8,49,78,.1); }
+.education-icon { flex: 0 0 52px; height: 52px; display: grid; place-items: center; border-radius: 15px; color: var(--blue-600); background: var(--blue-100); font-family: Georgia, serif; font-weight: 800; }
+.education-card:nth-child(2) .education-icon { color: var(--green-600); background: var(--green-100); }
+.education-card:nth-child(3) .education-icon { color: var(--purple-500); background: #eee9ff; font-size: 30px; }
+.education-card h2 { margin: 0; font-size: 17px; }
+.education-card p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.step-number { position: absolute; right: 13px; bottom: -13px; color: rgba(12,63,101,.055); font-size: 54px; font-weight: 900; }
+
+.calculator-section { width: min(920px, calc(100% - 40px)); margin: auto; padding: 110px 0 90px; }
+.section-heading { max-width: 650px; margin: 0 auto 28px; text-align: center; }
+.section-heading .eyebrow { justify-content: center; }
+.section-heading h2 { margin: 0; color: var(--navy-900); font-size: clamp(36px, 5vw, 52px); line-height: 1.05; letter-spacing: -.035em; }
+.section-heading > p:last-child { margin: 13px 0 0; color: var(--muted); }
+.privacy-badge { width: fit-content; margin: 0 auto 22px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; border: 1px solid #b9e7d8; border-radius: 99px; color: #12694f; background: var(--green-100); font-size: 13px; }
+.privacy-badge > span { width: 23px; height: 23px; display: grid; place-items: center; border-radius: 50%; color: var(--white); background: var(--green-600); font-weight: 900; }
+.privacy-badge small { color: #47796a; }
+.calculator-card { position: relative; padding: 42px 48px 32px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--white); box-shadow: var(--shadow); }
+.form-progress { position: absolute; left: 48px; right: 48px; top: 0; display: flex; gap: 6px; transform: translateY(-50%); }
+.form-progress span { height: 5px; flex: 1; border-radius: 20px; background: var(--blue-500); }
+.form-progress span:nth-child(2) { background: var(--green-600); }
+.form-progress span:nth-child(3) { background: var(--purple-500); }
+.global-error { margin: 0 0 24px; padding: 15px 17px; border-left: 4px solid var(--danger); border-radius: 10px; color: #7c2230; background: #fff0f2; font-weight: 700; }
+.form-block { margin: 0; padding: 30px 0; border: 0; border-bottom: 1px solid var(--line); }
+.form-block:first-of-type { padding-top: 8px; }
+.form-block legend { width: 100%; margin-bottom: 18px; color: var(--navy-900); font-size: 18px; font-weight: 850; }
+.form-block legend > span { width: 31px; height: 31px; margin-right: 9px; display: inline-grid; place-items: center; border-radius: 9px; color: var(--white); background: var(--navy-900); font-size: 14px; }
+.form-block legend small { margin-left: 7px; color: var(--muted); font-size: 12px; font-weight: 600; }
+.form-block legend abbr { color: var(--danger); text-decoration: none; }
+.fieldset-explanation { max-width: 720px; margin: -8px 0 17px; color: var(--muted); font-size: 14px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.field label { display: block; margin-bottom: 8px; color: var(--ink); font-size: 14px; font-weight: 800; }
+.field input, .field select, .height-input-row { width: 100%; min-height: 52px; border: 1px solid #bdccd7; border-radius: 12px; color: var(--ink); background: #fbfdff; }
+.field input { padding: 0 15px; }
+.field input:hover, .field select:hover, .height-input-row:hover { border-color: #7798b0; }
+.field input:focus, .field select:focus { border-color: var(--blue-500); background: var(--white); box-shadow: var(--focus); outline: none; }
+.field [aria-invalid="true"] { border-color: var(--danger); background: #fff9fa; }
+.field-hint { margin: 7px 0 0; color: var(--muted); font-size: 12px; }
+.field-error { min-height: 0; margin: 6px 0 0; color: var(--danger); font-size: 12px; font-weight: 700; }
+.field-error:empty { display: none; }
+.sex-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.choice-card { position: relative; min-height: 76px; padding: 15px 18px; display: flex; align-items: center; gap: 13px; border: 1px solid #bdccd7; border-radius: 14px; background: #fbfdff; cursor: pointer; }
+.choice-card:hover { border-color: var(--blue-500); background: #f5fbff; }
+.choice-card input { position: absolute; opacity: 0; pointer-events: none; }
+.choice-dot { width: 22px; height: 22px; flex: 0 0 22px; border: 2px solid #8aa1b3; border-radius: 50%; box-shadow: inset 0 0 0 4px var(--white); }
+.choice-card:has(input:checked) { border-color: var(--blue-500); background: var(--blue-100); box-shadow: 0 0 0 2px rgba(44,145,233,.13); }
+.choice-card:has(input:focus-visible) { box-shadow: var(--focus); }
+.choice-card input:checked + .choice-dot { border-color: var(--blue-500); background: var(--blue-500); }
+.choice-card strong, .choice-card small { display: block; }
+.choice-card small { margin-top: 2px; color: var(--muted); }
+.input-with-unit { position: relative; }
+.input-with-unit input { padding-right: 54px; }
+.input-with-unit > span { position: absolute; right: 15px; top: 50%; color: var(--muted); font-weight: 800; transform: translateY(-50%); }
+.height-input-row { display: grid; grid-template-columns: 1fr 145px; overflow: hidden; }
+.height-input-row input, .height-input-row select { min-width: 0; border: 0; border-radius: 0; }
+.height-input-row select { padding: 0 12px; border-left: 1px solid #bdccd7; }
+.form-actions { padding-top: 30px; display: flex; gap: 12px; }
+.primary-button, .secondary-button { min-height: 54px; padding: 0 22px; display: inline-flex; align-items: center; justify-content: center; gap: 13px; border-radius: 12px; font-weight: 850; }
+.primary-button { border: 1px solid var(--navy-900); color: var(--white); background: var(--navy-900); box-shadow: 0 12px 23px rgba(9,43,76,.16); }
+.primary-button:hover { background: var(--blue-600); border-color: var(--blue-600); transform: translateY(-1px); }
+.secondary-button { border: 1px solid #bdccd7; color: var(--navy-800); background: var(--white); }
+.secondary-button:hover { border-color: var(--navy-800); background: var(--surface); }
+.form-privacy { margin: 20px 0 0; color: var(--muted); text-align: center; font-size: 12px; }
+.form-privacy span { color: var(--green-600); }
+
+.result-section { padding: 20px 20px 100px; }
+.result-section[hidden] { display: none; }
+.result-card { width: min(1050px, 100%); margin: auto; padding: 45px; border-radius: var(--radius-lg); color: var(--ink); background: var(--white); box-shadow: var(--shadow); animation: result-in .5s ease both; }
+@keyframes result-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+.result-heading { padding: 0 0 30px; display: flex; align-items: center; justify-content: space-between; gap: 30px; border-bottom: 1px solid var(--line); }
+.result-eyebrow { margin-bottom: 10px; color: var(--green-600); }
+.result-heading h2 { margin: 0; color: var(--navy-900); font-size: 38px; line-height: 1; }
+.result-heading p:last-child { margin: 8px 0 0; color: var(--muted); }
+.result-bmi { min-width: 185px; padding: 17px 20px; border-radius: 18px; text-align: right; color: var(--white); background: linear-gradient(135deg, var(--blue-600), var(--navy-800)); }
+.result-bmi small, .result-bmi strong { display: block; }
+.result-bmi small { color: #cfe9fa; font-size: 12px; }
+.result-bmi strong { display: inline; font-size: 42px; line-height: 1.12; }
+.result-bmi span { margin-left: 3px; font-size: 12px; }
+.result-summary { padding: 28px 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.result-summary > div { min-height: 96px; padding: 15px; border: 1px solid var(--line); border-radius: 14px; background: #fbfdff; }
+.result-summary span, .result-summary small, .result-summary strong { display: block; }
+.result-summary span { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.result-summary strong { margin: 4px 0 1px; color: var(--navy-900); font-size: 19px; }
+.result-summary small { color: var(--muted); font-size: 11px; }
+.classification-panel { padding: 24px; display: flex; gap: 18px; align-items: flex-start; border: 1px solid #a8e0ce; border-radius: 18px; background: var(--green-100); }
+.classification-icon { width: 49px; height: 49px; flex: 0 0 49px; display: grid; place-items: center; border-radius: 14px; color: var(--white); background: var(--green-600); font-size: 27px; }
+.classification-panel small { color: #347360; text-transform: uppercase; letter-spacing: .06em; font-weight: 800; }
+.classification-panel h3 { margin: 2px 0 5px; color: #0c6249; font-size: 25px; }
+.classification-panel p { margin: 0; color: #315e51; }
+.z-chart { margin-top: 25px; padding: 26px; border: 1px solid var(--line); border-radius: 18px; }
+.chart-heading { display: flex; justify-content: space-between; gap: 20px; }
+.chart-heading h3 { margin: 0; color: var(--navy-900); font-size: 20px; }
+.chart-heading p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.chart-heading > span { height: fit-content; padding: 7px 12px; border-radius: 99px; color: var(--white); background: var(--purple-500); font-weight: 800; font-size: 13px; }
+.z-scale-scroll { margin-top: 58px; padding: 0 2px 30px; overflow-x: auto; }
+.z-scale-scroll:focus-visible { border-radius: 10px; box-shadow: var(--focus); }
+.z-scale { position: relative; min-width: 650px; }
+.z-bands { height: 64px; display: grid; grid-template-columns: 1fr 1fr 3fr 1fr 1fr 1fr; overflow: hidden; border-radius: 11px; }
+.band { padding: 8px 5px; display: grid; place-items: center; color: #183449; text-align: center; font-size: 10px; line-height: 1.15; font-weight: 850; }
+.severe-thin { background: #dbe9f3; } .thin { background: #bfe1f5; } .adequate { background: #bcebdc; } .overweight { background: #fff0a9; } .obesity { background: #ffd0a6; } .severe-obesity { background: #efb5bf; }
+.z-marker { position: absolute; z-index: 2; top: -43px; left: 50%; transform: translateX(-50%); transition: left .65s cubic-bezier(.2,.8,.2,1); }
+.z-marker span { padding: 6px 9px; display: block; border-radius: 7px; color: var(--white); background: var(--navy-900); white-space: nowrap; font-size: 10px; font-weight: 800; }
+.z-marker i { width: 3px; height: 86px; margin: auto; display: block; background: var(--navy-900); box-shadow: 0 0 0 2px rgba(255,255,255,.7); }
+.z-ticks { position: relative; height: 22px; border-top: 1px solid #97aab8; }
+.z-ticks span { position: absolute; top: 5px; color: var(--muted); font-size: 11px; font-weight: 800; transform: translateX(-50%); }
+.z-ticks span::before { content: ""; position: absolute; top: -7px; left: 50%; width: 1px; height: 5px; background: #97aab8; }
+.chart-note { margin: 6px 0 0; display: flex; gap: 8px; align-items: flex-start; color: var(--muted); font-size: 11px; }
+.chart-note span { width: 18px; height: 18px; flex: 0 0 18px; display: grid; place-items: center; border-radius: 50%; color: var(--white); background: var(--blue-600); font-family: Georgia, serif; font-weight: 800; }
+.result-guidance { margin-top: 25px; padding: 20px 22px; border-left: 4px solid var(--yellow-400); border-radius: 8px 14px 14px 8px; background: var(--yellow-100); }
+.result-guidance strong { color: var(--navy-900); }
+.result-guidance p { margin: 3px 0 0; color: #5d593e; }
+.result-actions { margin-top: 26px; display: flex; gap: 12px; }
+
+.how-section { padding: 100px 20px; color: var(--white); background: var(--navy-900); }
+.how-inner { width: min(1060px, 100%); margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 85px; align-items: center; }
+.how-copy .eyebrow { color: #78bae8; }
+.how-copy h2 { margin: 0; font-size: clamp(36px, 4vw, 54px); line-height: 1.05; letter-spacing: -.035em; }
+.how-copy > p:last-of-type { color: #bed4e4; }
+.formula-card { margin-top: 30px; padding: 23px 26px; border: 1px solid rgba(255,255,255,.15); border-radius: 18px; background: rgba(255,255,255,.08); }
+.formula-card > span { color: #9fc5df; text-transform: uppercase; letter-spacing: .08em; font-size: 11px; font-weight: 800; }
+.formula-card strong { margin-top: 10px; display: flex; align-items: center; gap: 12px; font-family: Georgia, serif; font-size: 25px; }
+.fraction { display: inline-flex; flex-direction: column; text-align: center; }
+.fraction i { padding: 1px 8px; font-style: normal; font-size: 15px; }
+.fraction i:first-child { border-bottom: 1px solid var(--yellow-400); }
+.calculation-steps { margin: 0; padding: 0; list-style: none; }
+.calculation-steps li { position: relative; padding: 18px 0; display: flex; gap: 20px; }
+.calculation-steps li:not(:last-child)::after { content: ""; position: absolute; left: 20px; top: 62px; bottom: -3px; width: 1px; background: rgba(255,255,255,.18); }
+.calculation-steps li > span { width: 42px; height: 42px; flex: 0 0 42px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.2); border-radius: 13px; color: var(--navy-950); background: var(--yellow-400); font-weight: 900; }
+.calculation-steps strong { font-size: 17px; }
+.calculation-steps p { margin: 2px 0 0; color: #aac8dc; }
+
+.notice-section { padding: 70px 20px; background: var(--surface); }
+.notice-card { width: min(1060px, 100%); margin: auto; padding: 28px 32px; display: flex; align-items: flex-start; gap: 22px; border: 1px solid #ead888; border-radius: 20px; background: var(--yellow-100); }
+.notice-icon { width: 48px; height: 48px; flex: 0 0 48px; display: grid; place-items: center; border-radius: 14px; color: var(--navy-950); background: var(--yellow-400); font-family: Georgia, serif; font-size: 27px; font-weight: 900; }
+.notice-card h2 { margin: 0 0 5px; color: var(--navy-900); font-size: 20px; }
+.notice-card p { margin: 0; color: #5e5b46; font-size: 14px; }
+.site-footer { padding: 42px 20px; color: #b7cede; background: var(--navy-950); }
+.footer-inner { width: min(1060px, 100%); margin: auto; display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 35px; align-items: center; }
+.footer-inner strong { color: var(--white); }
+.footer-inner p { margin: 3px 0 0; font-size: 13px; }
+.footer-reference { color: #8cabc0; }
+
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 65px; padding-top: 135px; }
+  .hero { min-height: 980px; }
+  .hero-visual { width: min(520px, 92%); margin: 0 auto; }
+  .education-grid { grid-template-columns: 1fr; width: min(650px, calc(100% - 40px)); }
+  .education-strip { margin-top: -55px; }
+  .how-inner { grid-template-columns: 1fr; gap: 40px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 20px; }
+}
+
+@media (max-width: 680px) {
+  .header-inner { width: min(100% - 28px, 1180px); min-height: 82px; }
+  .brand strong { font-size: 13px; } .brand small { font-size: 10px; }
+  .brand-mark { width: 37px; height: 37px; }
+  .presentation-button { width: 43px; padding: 0; font-size: 0; }
+  .presentation-button span { font-size: 20px; }
+  .hero { min-height: 910px; }
+  .hero-inner { width: min(100% - 30px, 1180px); min-height: auto; padding: 120px 0 85px; }
+  .hero h1 { font-size: clamp(42px, 13vw, 59px); }
+  .hero-description { font-size: 15px; }
+  .visual-card { padding: 20px; }
+  .chart { height: 190px; }
+  .floating-symbol { display: none; }
+  .education-grid, .calculator-section { width: min(100% - 28px, 920px); }
+  .calculator-section { padding: 90px 0 70px; }
+  .privacy-badge { border-radius: 16px; flex-wrap: wrap; justify-content: center; text-align: center; }
+  .privacy-badge small { width: 100%; }
+  .calculator-card { padding: 35px 20px 26px; border-radius: 20px; }
+  .form-progress { left: 20px; right: 20px; }
+  .form-grid, .sex-options { grid-template-columns: 1fr; }
+  .height-input-row { grid-template-columns: 1fr 128px; }
+  .form-actions, .result-actions { flex-direction: column; }
+  .form-actions button, .result-actions button { width: 100%; }
+  .result-section { padding-inline: 14px; }
+  .result-card { padding: 27px 18px; border-radius: 20px; }
+  .result-heading { align-items: stretch; flex-direction: column; }
+  .result-bmi { text-align: left; }
+  .result-summary { grid-template-columns: 1fr 1fr; }
+  .classification-panel { padding: 18px; }
+  .classification-icon { width: 40px; height: 40px; flex-basis: 40px; }
+  .classification-panel h3 { font-size: 21px; }
+  .z-chart { padding: 20px 14px; }
+  .chart-heading { flex-direction: column; }
+  .chart-heading > span { width: fit-content; }
+  .notice-card { padding: 22px; }
+}
+
+@media (max-width: 420px) {
+  .brand small { max-width: 165px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hero-subtitle { font-size: 18px; }
+  .education-card { padding: 20px; }
+  .result-summary { grid-template-columns: 1fr; }
+  .notice-card { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+@media print {
+  .site-header, .hero, .education-strip, .calculator-section, .how-section, .notice-section, .site-footer, .result-actions { display: none !important; }
+  .result-section { display: block !important; padding: 0; }
+  .result-card { box-shadow: none; }
+}
+
+</style>
+</head>
+<body>
+  <a class="skip-link" href="#calculadora">Ir para a calculadora</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#inicio" aria-label="Voltar ao início">
+        <span class="brand-mark" aria-hidden="true">Σ</span>
+        <span><strong>Feira do Conhecimento</strong><small>Escola Esther Vianna Bologna</small></span>
+      </a>
+      <button class="presentation-button" id="presentationButton" type="button" aria-label="Ativar modo apresentação em tela cheia">
+        <span aria-hidden="true">⛶</span> Modo apresentação
+      </button>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-shape hero-shape-one" aria-hidden="true"></div>
+      <div class="hero-shape hero-shape-two" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> Matemática • Estatística • Saúde</p>
+          <h1 id="hero-title">O Peso da <em>Estatística</em> na Saúde</h1>
+          <p class="hero-subtitle">Calculadora educativa de IMC para crianças e adolescentes</p>
+          <p class="hero-description">Descubra como Matemática, crescimento e saúde podem ser analisados por meio dos dados.</p>
+          <a class="hero-cta" href="#calculadora">Começar avaliação <span aria-hidden="true">↓</span></a>
+        </div>
+
+        <div class="hero-visual" aria-label="Ilustração educativa com gráfico, régua e símbolos matemáticos">
+          <div class="visual-card">
+            <div class="visual-topline"><span>IMC por idade</span><span class="live-dot">OMS 2007</span></div>
+            <div class="chart" aria-hidden="true">
+              <span style="--h:38%"></span><span style="--h:57%"></span><span style="--h:47%"></span><span style="--h:78%"></span><span style="--h:66%"></span>
+              <i class="chart-curve"></i>
+              <b class="plot-dot dot-one"></b><b class="plot-dot dot-two"></b><b class="plot-dot dot-three"></b>
+            </div>
+            <div class="visual-formula"><small>Índice de Massa Corporal</small><strong>IMC = peso ÷ altura²</strong></div>
+          </div>
+          <span class="floating-symbol symbol-one" aria-hidden="true">x²</span>
+          <span class="floating-symbol symbol-two" aria-hidden="true">%</span>
+          <span class="floating-symbol symbol-three" aria-hidden="true">+1σ</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="education-strip" aria-label="Dados utilizados no cálculo">
+      <div class="education-grid">
+        <article class="education-card">
+          <span class="education-icon scale-icon" aria-hidden="true">kg</span>
+          <div><h2>Peso</h2><p>Medido em quilogramas.</p></div>
+          <span class="step-number">01</span>
+        </article>
+        <article class="education-card">
+          <span class="education-icon ruler-icon" aria-hidden="true">↔</span>
+          <div><h2>Altura</h2><p>Utilizada ao quadrado no cálculo.</p></div>
+          <span class="step-number">02</span>
+        </article>
+        <article class="education-card">
+          <span class="education-icon curve-icon" aria-hidden="true">⌁</span>
+          <div><h2>Idade e sexo</h2><p>Necessários para interpretar a curva de crescimento.</p></div>
+          <span class="step-number">03</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="calculator-section" id="calculadora" aria-labelledby="calculator-title">
+      <div class="section-heading">
+        <p class="eyebrow dark"><span></span> Sua vez de calcular</p>
+        <h2 id="calculator-title">Vamos aos dados?</h2>
+        <p>Preencha com atenção. Os campos marcados com <span aria-hidden="true">*</span><span class="sr-only">asterisco</span> são obrigatórios.</p>
+      </div>
+
+      <div class="privacy-badge"><span aria-hidden="true">✓</span><strong>Seus dados não são salvos</strong><small>O cálculo acontece somente neste dispositivo.</small></div>
+
+      <form class="calculator-card" id="imcForm" novalidate>
+        <div class="form-progress" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="global-error" id="globalError" role="alert" tabindex="-1" hidden></div>
+
+        <fieldset class="form-block">
+          <legend><span>1</span> Identificação <small>opcional</small></legend>
+          <div class="field full-field">
+            <label for="name">Nome, apelido ou código — opcional</label>
+            <input id="name" name="name" type="text" maxlength="60" autocomplete="off" placeholder="Ex.: Participante 12">
+            <p class="field-hint">Para preservar a privacidade, você pode utilizar somente um código ou deixar este campo vazio.</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-block">
+          <legend><span>2</span> Curva de crescimento <abbr title="campo obrigatório">*</abbr></legend>
+          <p class="fieldset-explanation">O dado é usado exclusivamente para selecionar a curva antropométrica correspondente. As curvas da OMS são diferentes para meninos e meninas.</p>
+          <div class="sex-options" id="sexGroup">
+            <label class="choice-card"><input type="radio" name="sex" value="male"><span class="choice-dot"></span><span><strong>Masculino</strong><small>Curva para meninos</small></span></label>
+            <label class="choice-card"><input type="radio" name="sex" value="female"><span class="choice-dot"></span><span><strong>Feminino</strong><small>Curva para meninas</small></span></label>
+          </div>
+          <p class="field-error" id="sexError"></p>
+        </fieldset>
+
+        <fieldset class="form-block">
+          <legend><span>3</span> Datas <abbr title="campos obrigatórios">*</abbr></legend>
+          <div class="form-grid">
+            <div class="field">
+              <label for="birthDate">Data de nascimento</label>
+              <input id="birthDate" name="birthDate" type="date" required aria-describedby="birthDateError">
+              <p class="field-error" id="birthDateError"></p>
+            </div>
+            <div class="field">
+              <label for="assessmentDate">Data da avaliação</label>
+              <input id="assessmentDate" name="assessmentDate" type="date" required aria-describedby="assessmentDateError">
+              <p class="field-error" id="assessmentDateError"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-block">
+          <legend><span>4</span> Medidas <abbr title="campos obrigatórios">*</abbr></legend>
+          <div class="form-grid measures-grid">
+            <div class="field">
+              <label for="weight">Peso</label>
+              <div class="input-with-unit"><input id="weight" name="weight" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex.: 42,5" aria-describedby="weightHint weightError"><span>kg</span></div>
+              <p class="field-hint" id="weightHint">Aceita vírgula ou ponto.</p>
+              <p class="field-error" id="weightError"></p>
+            </div>
+            <div class="field">
+              <label for="height">Altura</label>
+              <div class="height-input-row">
+                <input id="height" name="height" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex.: 145" aria-describedby="heightError">
+                <select id="heightUnit" name="heightUnit" aria-label="Unidade da altura">
+                  <option value="cm">centímetros</option>
+                  <option value="m">metros</option>
+                </select>
+              </div>
+              <p class="field-error" id="heightError"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button class="primary-button" type="submit">Calcular meu IMC <span aria-hidden="true">→</span></button>
+          <button class="secondary-button" id="clearButton" type="button"><span aria-hidden="true">↻</span> Limpar dados</button>
+        </div>
+        <p class="form-privacy"><span aria-hidden="true">◉</span> Nenhuma informação é enviada, armazenada ou adicionada a um histórico.</p>
+      </form>
+    </section>
+
+    <section class="result-section" id="resultado" aria-labelledby="result-title" aria-live="polite" hidden>
+      <div class="result-card" id="resultCard">
+        <div class="result-heading">
+          <div><p class="eyebrow result-eyebrow"><span></span> Análise concluída</p><h2 id="result-title">Seu resultado</h2><p id="resultName"></p></div>
+          <div class="result-bmi"><small>IMC calculado</small><strong id="resultBmi">—</strong><span>kg/m²</span></div>
+        </div>
+
+        <div class="result-summary">
+          <div><span>Idade</span><strong id="resultAge">—</strong><small id="resultMonths">—</small></div>
+          <div><span>Peso</span><strong id="resultWeight">—</strong></div>
+          <div><span>Altura</span><strong id="resultHeight">—</strong></div>
+          <div><span>Escore-z</span><strong id="resultZ">—</strong><small>IMC por idade</small></div>
+        </div>
+
+        <div class="classification-panel">
+          <div class="classification-icon" aria-hidden="true">◎</div>
+          <div><small>Classificação na curva de crescimento</small><h3 id="resultClassification">—</h3><p id="resultMessage">—</p></div>
+        </div>
+
+        <div class="z-chart" aria-labelledby="chart-title">
+          <div class="chart-heading"><div><h3 id="chart-title">Onde o resultado aparece na curva</h3><p>Representação educativa do escore-z calculado.</p></div><span id="chartZBadge">z = —</span></div>
+          <div class="z-scale-scroll" tabindex="0" aria-label="Régua horizontal de classificação por escore-z">
+            <div class="z-scale" id="zScale">
+              <div class="z-marker" id="zMarker"><span id="markerLabel">Você está aqui</span><i></i></div>
+              <div class="z-bands">
+                <span class="band severe-thin">Magreza<br>acentuada</span>
+                <span class="band thin">Magreza</span>
+                <span class="band adequate">Faixa adequada</span>
+                <span class="band overweight">Sobrepeso</span>
+                <span class="band obesity">Obesidade</span>
+                <span class="band severe-obesity">Obesidade<br>grave</span>
+              </div>
+              <div class="z-ticks"><span style="left:12.5%">−3</span><span style="left:25%">−2</span><span style="left:62.5%">+1</span><span style="left:75%">+2</span><span style="left:87.5%">+3</span></div>
+            </div>
+          </div>
+          <p class="chart-note"><span aria-hidden="true">i</span> O cálculo usa parâmetros LMS oficiais incorporados ao sistema. O gráfico é uma representação educativa.</p>
+        </div>
+
+        <div class="result-guidance"><strong>Uma medida é um ponto da história, não a história inteira.</strong><p>Observe o crescimento ao longo do tempo e converse com um profissional de saúde quando houver dúvidas.</p></div>
+        <div class="result-actions">
+          <button class="primary-button" id="newAssessmentButton" type="button">Iniciar nova avaliação <span aria-hidden="true">↻</span></button>
+          <button class="secondary-button" id="backToFormButton" type="button">Rever dados</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-section" aria-labelledby="how-title">
+      <div class="how-inner">
+        <div class="how-copy">
+          <p class="eyebrow dark"><span></span> Entenda o cálculo</p>
+          <h2 id="how-title">Da medida à informação</h2>
+          <p>Primeiro dividimos o peso pela altura ao quadrado. Depois comparamos o resultado com crianças ou adolescentes da mesma idade e sexo, utilizando uma curva de crescimento.</p>
+          <div class="formula-card"><span>Fórmula do IMC</span><strong>IMC = <span class="fraction"><i>peso (kg)</i><i>altura (m) × altura (m)</i></span></strong></div>
+        </div>
+        <ol class="calculation-steps">
+          <li><span>1</span><div><strong>Transforme a altura</strong><p>145 cm se transforma em 1,45 m.</p></div></li>
+          <li><span>2</span><div><strong>Calcule o IMC</strong><p>42,5 ÷ (1,45 × 1,45) = 20,2 kg/m².</p></div></li>
+          <li><span>3</span><div><strong>Consulte a curva</strong><p>O resultado é comparado por idade em meses e sexo.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="notice-section" aria-label="Aviso educativo importante">
+      <div class="notice-card"><span class="notice-icon" aria-hidden="true">!</span><div><h2>Importante: esta ferramenta não faz diagnóstico</h2><p>Esta calculadora tem finalidade exclusivamente educativa. O IMC é um indicador de triagem e não fornece diagnóstico. A avaliação da saúde de crianças e adolescentes deve considerar crescimento, desenvolvimento, composição corporal, alimentação, atividade física, condições clínicas e contexto familiar. Procure um profissional de saúde para uma avaliação individual.</p></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>Feira do Conhecimento</strong><p>Escola Esther Vianna Bologna</p></div>
+      <p>Projeto interdisciplinar de <strong>Matemática, Ciências e Educação Física</strong></p>
+      <p class="footer-reference">Referência: curvas de crescimento da Organização Mundial da Saúde — OMS 2007. Finalidade educativa.</p>
+    </div>
+  </footer>
+
+  <script>
+/* Dados LMS oficiais da OMS. Veja README.md para fontes e atualização. */
+(function(root){root.WHO_LMS_DATA={"source":"WHO 2007 Growth Reference, BMI-for-age, 5-19 years","firstMonth":60,"lastMonth":228,"female":[[-0.5684,15.2747,0.09789],[-0.8886,15.2441,0.09692],[-0.9068,15.2434,0.09738],[-0.9248,15.2433,0.09783],[-0.9427,15.2438,0.09829],[-0.9605,15.2448,0.09875],[-0.978,15.2464,0.0992],[-0.9954,15.2487,0.09966],[-1.0126,15.2516,0.10012],[-1.0296,15.2551,0.10058],[-1.0464,15.2592,0.10104],[-1.063,15.2641,0.10149],[-1.0794,15.2697,0.10195],[-1.0956,15.276,0.10241],[-1.1115,15.2831,0.10287],[-1.1272,15.2911,0.10333],[-1.1427,15.2998,0.10379],[-1.1579,15.3095,0.10425],[-1.1728,15.32,0.10471],[-1.1875,15.3314,0.10517],[-1.2019,15.3439,0.10562],[-1.216,15.3572,0.10608],[-1.2298,15.3717,0.10654],[-1.2433,15.3871,0.107],[-1.2565,15.4036,0.10746],[-1.2693,15.4211,0.10792],[-1.2819,15.4397,0.10837],[-1.2941,15.4593,0.10883],[-1.306,15.4798,0.10929],[-1.3175,15.5014,0.10974],[-1.3287,15.524,0.1102],[-1.3395,15.5476,0.11065],[-1.3499,15.5723,0.1111],[-1.36,15.5979,0.11156],[-1.3697,15.6246,0.11201],[-1.379,15.6523,0.11246],[-1.388,15.681,0.11291],[-1.3966,15.7107,0.11335],[-1.4047,15.7415,0.1138],[-1.4125,15.7732,0.11424],[-1.4199,15.8058,0.11469],[-1.427,15.8394,0.11513],[-1.4336,15.8738,0.11557],[-1.4398,15.909,0.11601],[-1.4456,15.9451,0.11644],[-1.4511,15.9818,0.11688],[-1.4561,16.0194,0.11731],[-1.4607,16.0575,0.11774],[-1.465,16.0964,0.11816],[-1.4688,16.1358,0.11859],[-1.4723,16.1759,0.11901],[-1.4753,16.2166,0.11943],[-1.478,16.258,0.11985],[-1.4803,16.2999,0.12026],[-1.4823,16.3425,0.12067],[-1.4838,16.3858,0.12108],[-1.485,16.4298,0.12148],[-1.4859,16.4746,0.12188],[-1.4864,16.52,0.12228],[-1.4866,16.5663,0.12268],[-1.4864,16.6133,0.12307],[-1.4859,16.6612,0.12346],[-1.4851,16.71,0.12384],[-1.4839,16.7595,0.12422],[-1.4825,16.81,0.1246],[-1.4807,16.8614,0.12497],[-1.4787,16.9136,0.12534],[-1.4763,16.9667,0.12571],[-1.4737,17.0208,0.12607],[-1.4708,17.0757,0.12643],[-1.4677,17.1316,0.12678],[-1.4642,17.1883,0.12713],[-1.4606,17.2459,0.12748],[-1.4567,17.3044,0.12782],[-1.4526,17.3637,0.12816],[-1.4482,17.4238,0.12849],[-1.4436,17.4847,0.12882],[-1.4389,17.5464,0.12914],[-1.4339,17.6088,0.12946],[-1.4288,17.6719,0.12978],[-1.4235,17.7357,0.13009],[-1.418,17.8001,0.1304],[-1.4123,17.8651,0.1307],[-1.4065,17.9306,0.13099],[-1.4006,17.9966,0.13129],[-1.3945,18.063,0.13158],[-1.3883,18.1297,0.13186],[-1.3819,18.1967,0.13214],[-1.3755,18.2639,0.13241],[-1.3689,18.3312,0.13268],[-1.3621,18.3986,0.13295],[-1.3553,18.466,0.13321],[-1.3483,18.5333,0.13347],[-1.3413,18.6006,0.13372],[-1.3341,18.6677,0.13397],[-1.3269,18.7346,0.13421],[-1.3195,18.8012,0.13445],[-1.3121,18.8675,0.13469],[-1.3046,18.9335,0.13492],[-1.297,18.9991,0.13514],[-1.2894,19.0642,0.13537],[-1.2816,19.1289,0.13559],[-1.2739,19.1931,0.1358],[-1.2661,19.2567,0.13601],[-1.2583,19.3197,0.13622],[-1.2504,19.382,0.13642],[-1.2425,19.4437,0.13662],[-1.2345,19.5045,0.13681],[-1.2266,19.5647,0.137],[-1.2186,19.624,0.13719],[-1.2107,19.6824,0.13738],[-1.2027,19.74,0.13756],[-1.1947,19.7966,0.13774],[-1.1867,19.8523,0.13791],[-1.1788,19.907,0.13808],[-1.1708,19.9607,0.13825],[-1.1629,20.0133,0.13841],[-1.1549,20.0648,0.13858],[-1.147,20.1152,0.13873],[-1.139,20.1644,0.13889],[-1.1311,20.2125,0.13904],[-1.1232,20.2595,0.1392],[-1.1153,20.3053,0.13934],[-1.1074,20.3499,0.13949],[-1.0996,20.3934,0.13963],[-1.0917,20.4357,0.13977],[-1.0838,20.4769,0.13991],[-1.076,20.517,0.14005],[-1.0681,20.556,0.14018],[-1.0603,20.5938,0.14031],[-1.0525,20.6306,0.14044],[-1.0447,20.6663,0.14057],[-1.0368,20.7008,0.1407],[-1.029,20.7344,0.14082],[-1.0212,20.7668,0.14094],[-1.0134,20.7982,0.14106],[-1.0055,20.8286,0.14118],[-0.9977,20.858,0.1413],[-0.9898,20.8863,0.14142],[-0.9819,20.9137,0.14153],[-0.974,20.9401,0.14164],[-0.9661,20.9656,0.14176],[-0.9582,20.9901,0.14187],[-0.9503,21.0138,0.14198],[-0.9423,21.0367,0.14208],[-0.9344,21.0587,0.14219],[-0.9264,21.0801,0.1423],[-0.9184,21.1007,0.1424],[-0.9104,21.1206,0.1425],[-0.9024,21.1399,0.14261],[-0.8944,21.1586,0.14271],[-0.8863,21.1768,0.14281],[-0.8783,21.1944,0.14291],[-0.8703,21.2116,0.14301],[-0.8623,21.2282,0.14311],[-0.8542,21.2444,0.1432],[-0.8462,21.2603,0.1433],[-0.8382,21.2757,0.1434],[-0.8301,21.2908,0.14349],[-0.8221,21.3055,0.14359],[-0.814,21.32,0.14368],[-0.806,21.3341,0.14377],[-0.798,21.348,0.14386],[-0.7899,21.3617,0.14396],[-0.7819,21.3752,0.14405],[-0.7738,21.3884,0.14414],[-0.7658,21.4014,0.14423],[-0.7577,21.4143,0.14432],[-0.7496,21.4269,0.14441]],"male":[[-0.6892,15.1916,0.087],[-0.7387,15.2641,0.0839],[-0.7621,15.2616,0.08414],[-0.7856,15.2604,0.08439],[-0.8089,15.2605,0.08464],[-0.8322,15.2619,0.0849],[-0.8554,15.2645,0.08516],[-0.8785,15.2684,0.08543],[-0.9015,15.2737,0.0857],[-0.9243,15.2801,0.08597],[-0.9471,15.2877,0.08625],[-0.9697,15.2965,0.08653],[-0.9921,15.3062,0.08682],[-1.0144,15.3169,0.08711],[-1.0365,15.3285,0.08741],[-1.0584,15.3408,0.08771],[-1.0801,15.354,0.08802],[-1.1017,15.3679,0.08833],[-1.123,15.3825,0.08865],[-1.1441,15.3978,0.08898],[-1.1649,15.4137,0.08931],[-1.1856,15.4302,0.08964],[-1.206,15.4473,0.08998],[-1.2261,15.465,0.09033],[-1.246,15.4832,0.09068],[-1.2656,15.5019,0.09103],[-1.2849,15.521,0.09139],[-1.304,15.5407,0.09176],[-1.3228,15.5608,0.09213],[-1.3414,15.5814,0.09251],[-1.3596,15.6023,0.09289],[-1.3776,15.6237,0.09327],[-1.3953,15.6455,0.09366],[-1.4126,15.6677,0.09406],[-1.4297,15.6903,0.09445],[-1.4464,15.7133,0.09486],[-1.4629,15.7368,0.09526],[-1.479,15.7606,0.09567],[-1.4947,15.7848,0.09609],[-1.5101,15.8094,0.09651],[-1.5252,15.8344,0.09693],[-1.5399,15.8597,0.09735],[-1.5542,15.8855,0.09778],[-1.5681,15.9116,0.09821],[-1.5817,15.9381,0.09864],[-1.5948,15.9651,0.09907],[-1.6076,15.9925,0.09951],[-1.6199,16.0205,0.09994],[-1.6318,16.049,0.10038],[-1.6433,16.0781,0.10082],[-1.6544,16.1078,0.10126],[-1.6651,16.1381,0.1017],[-1.6753,16.1692,0.10214],[-1.6851,16.2009,0.10259],[-1.6944,16.2333,0.10303],[-1.7032,16.2665,0.10347],[-1.7116,16.3004,0.10391],[-1.7196,16.3351,0.10435],[-1.7271,16.3704,0.10478],[-1.7341,16.4065,0.10522],[-1.7407,16.4433,0.10566],[-1.7468,16.4807,0.10609],[-1.7525,16.5189,0.10652],[-1.7578,16.5578,0.10695],[-1.7626,16.5974,0.10738],[-1.767,16.6376,0.1078],[-1.771,16.6786,0.10823],[-1.7745,16.7203,0.10865],[-1.7777,16.7628,0.10906],[-1.7804,16.8059,0.10948],[-1.7828,16.8497,0.10989],[-1.7847,16.8941,0.1103],[-1.7862,16.9392,0.1107],[-1.7873,16.985,0.1111],[-1.7881,17.0314,0.1115],[-1.7884,17.0784,0.11189],[-1.7884,17.1262,0.11228],[-1.788,17.1746,0.11266],[-1.7873,17.2236,0.11304],[-1.7861,17.2734,0.11342],[-1.7846,17.324,0.11379],[-1.7828,17.3752,0.11415],[-1.7806,17.4272,0.11451],[-1.778,17.4799,0.11487],[-1.7751,17.5334,0.11522],[-1.7719,17.5877,0.11556],[-1.7684,17.6427,0.1159],[-1.7645,17.6985,0.11623],[-1.7604,17.7551,0.11656],[-1.7559,17.8124,0.11688],[-1.7511,17.8704,0.1172],[-1.7461,17.9292,0.11751],[-1.7408,17.9887,0.11781],[-1.7352,18.0488,0.11811],[-1.7293,18.1096,0.11841],[-1.7232,18.171,0.11869],[-1.7168,18.233,0.11898],[-1.7102,18.2955,0.11925],[-1.7033,18.3586,0.11952],[-1.6962,18.4221,0.11979],[-1.6888,18.486,0.12005],[-1.6811,18.5502,0.1203],[-1.6732,18.6148,0.12055],[-1.6651,18.6795,0.12079],[-1.6568,18.7445,0.12102],[-1.6482,18.8095,0.12125],[-1.6394,18.8746,0.12148],[-1.6304,18.9398,0.1217],[-1.6211,19.005,0.12191],[-1.6116,19.0701,0.12212],[-1.602,19.1351,0.12233],[-1.5921,19.2,0.12253],[-1.5821,19.2648,0.12272],[-1.5719,19.3294,0.12291],[-1.5615,19.3937,0.1231],[-1.551,19.4578,0.12328],[-1.5403,19.5217,0.12346],[-1.5294,19.5853,0.12363],[-1.5185,19.6486,0.1238],[-1.5074,19.7117,0.12396],[-1.4961,19.7744,0.12412],[-1.4848,19.8367,0.12428],[-1.4733,19.8987,0.12443],[-1.4617,19.9603,0.12458],[-1.45,20.0215,0.12473],[-1.4382,20.0823,0.12487],[-1.4263,20.1427,0.12501],[-1.4143,20.2026,0.12514],[-1.4022,20.2621,0.12528],[-1.39,20.3211,0.12541],[-1.3777,20.3796,0.12554],[-1.3653,20.4376,0.12567],[-1.3529,20.4951,0.12579],[-1.3403,20.5521,0.12591],[-1.3277,20.6085,0.12603],[-1.3149,20.6644,0.12615],[-1.3021,20.7197,0.12627],[-1.2892,20.7745,0.12638],[-1.2762,20.8287,0.1265],[-1.2631,20.8824,0.12661],[-1.2499,20.9355,0.12672],[-1.2366,20.9881,0.12683],[-1.2233,21.04,0.12694],[-1.2098,21.0914,0.12704],[-1.1962,21.1423,0.12715],[-1.1826,21.1925,0.12726],[-1.1688,21.2423,0.12736],[-1.155,21.2914,0.12746],[-1.141,21.34,0.12756],[-1.127,21.388,0.12767],[-1.1129,21.4354,0.12777],[-1.0986,21.4822,0.12787],[-1.0843,21.5285,0.12797],[-1.0699,21.5742,0.12807],[-1.0553,21.6193,0.12816],[-1.0407,21.6638,0.12826],[-1.026,21.7077,0.12836],[-1.0112,21.751,0.12845],[-0.9962,21.7937,0.12855],[-0.9812,21.8358,0.12864],[-0.9661,21.8773,0.12874],[-0.9509,21.9182,0.12883],[-0.9356,21.9585,0.12893],[-0.9202,21.9982,0.12902],[-0.9048,22.0374,0.12911],[-0.8892,22.076,0.1292],[-0.8735,22.114,0.1293],[-0.8578,22.1514,0.12939],[-0.8419,22.1883,0.12948]]};if(typeof module==='object'&&module.exports){module.exports=root.WHO_LMS_DATA;}})(typeof globalThis!=='undefined'?globalThis:this);
+
+/*
+ * Calculadora educativa de IMC por idade e sexo.
+ *
+ * DADOS DA OMS
+ * O arquivo who-data.js contém os parâmetros LMS oficiais por sexo e mês:
+ * L = potência Box-Cox que corrige a assimetria da distribuição;
+ * M = mediana do IMC para aquela idade e sexo;
+ * S = coeficiente de variação da distribuição.
+ *
+ * Para L diferente de zero: z = ((IMC / M)^L - 1) / (L × S)
+ * Para L igual a zero:      z = ln(IMC / M) / S
+ *
+ * Fora de ±3, aplica-se a extensão linear recomendada pela OMS, usando a
+ * distância entre 2 e 3 desvios-padrão. Consulte README.md para fontes.
+ */
+(function (root) {
+  "use strict";
+
+  const MS_PER_DAY = 86_400_000;
+  const MIN_MONTH = 60;
+  const MAX_MONTH = 228;
+
+  const CLASSIFICATIONS = {
+    severeThin: {
+      label: "Magreza acentuada",
+      message: "O resultado ficou muito abaixo da faixa esperada para idade e sexo. Uma única medição não estabelece diagnóstico, mas é recomendável conversar com os responsáveis e buscar avaliação de um profissional de saúde."
+    },
+    thin: {
+      label: "Magreza",
+      message: "O resultado ficou abaixo da faixa de referência para idade e sexo. É importante observar o crescimento ao longo do tempo e, se necessário, conversar com um profissional de saúde."
+    },
+    adequate: {
+      label: "Faixa adequada",
+      message: "O resultado está dentro da faixa de referência para idade e sexo. Continue valorizando alimentação variada, movimento, sono adequado e acompanhamento do crescimento."
+    },
+    overweight: {
+      label: "Sobrepeso",
+      message: "O resultado ficou acima da faixa de referência para idade e sexo. Isso não representa um diagnóstico isolado. A análise deve considerar crescimento, alimentação, atividade física, sono e acompanhamento profissional."
+    },
+    obesity: {
+      label: "Obesidade",
+      message: "O resultado ficou consideravelmente acima da faixa de referência para idade e sexo. Recomenda-se conversar com os responsáveis e procurar orientação profissional, sem julgamentos ou dietas por conta própria."
+    },
+    severeObesity: {
+      label: "Obesidade grave",
+      message: "O resultado ficou muito acima da faixa de referência para idade e sexo. É importante procurar avaliação profissional para uma análise completa, respeitosa e individualizada."
+    }
+  };
+
+  function parseDate(value) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return null;
+    const [year, month, day] = value.split("-").map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day));
+    if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) return null;
+    return date;
+  }
+
+  function dateToInputValue(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  function calculateAge(birthInput, assessmentInput) {
+    const birth = birthInput instanceof Date ? birthInput : parseDate(birthInput);
+    const assessment = assessmentInput instanceof Date ? assessmentInput : parseDate(assessmentInput);
+    if (!birth || !assessment || assessment < birth) return null;
+
+    let totalMonths = (assessment.getUTCFullYear() - birth.getUTCFullYear()) * 12
+      + assessment.getUTCMonth() - birth.getUTCMonth();
+    if (assessment.getUTCDate() < birth.getUTCDate()) totalMonths -= 1;
+
+    return {
+      years: Math.floor(totalMonths / 12),
+      months: totalMonths % 12,
+      totalMonths,
+      totalDays: Math.floor((assessment.getTime() - birth.getTime()) / MS_PER_DAY)
+    };
+  }
+
+  function parseBrazilianNumber(value) {
+    if (typeof value === "number") return Number.isFinite(value) ? value : NaN;
+    const normalized = String(value || "").trim().replace(/\s/g, "").replace(",", ".");
+    if (!/^\d+(?:\.\d+)?$/.test(normalized)) return NaN;
+    return Number(normalized);
+  }
+
+  function heightInMeters(value, unit) {
+    const height = parseBrazilianNumber(value);
+    if (!Number.isFinite(height)) return NaN;
+    return unit === "cm" ? height / 100 : height;
+  }
+
+  function calculateBmi(weight, heightMeters) {
+    return weight / (heightMeters * heightMeters);
+  }
+
+  function lmsValueAtZ(z, l, m, s) {
+    if (Math.abs(l) < 1e-12) return m * Math.exp(s * z);
+    const base = 1 + l * s * z;
+    return base > 0 ? m * Math.pow(base, 1 / l) : NaN;
+  }
+
+  function calculateWhoZScore(bmi, l, m, s) {
+    const rawZ = Math.abs(l) < 1e-12
+      ? Math.log(bmi / m) / s
+      : (Math.pow(bmi / m, l) - 1) / (l * s);
+
+    if (rawZ >= -3 && rawZ <= 3) return rawZ;
+
+    if (rawZ > 3) {
+      const sd3 = lmsValueAtZ(3, l, m, s);
+      const sd2 = lmsValueAtZ(2, l, m, s);
+      return 3 + (bmi - sd3) / (sd3 - sd2);
+    }
+
+    const sdNeg3 = lmsValueAtZ(-3, l, m, s);
+    const sdNeg2 = lmsValueAtZ(-2, l, m, s);
+    return -3 + (bmi - sdNeg3) / (sdNeg2 - sdNeg3);
+  }
+
+  function getLms(sex, ageMonths, data) {
+    const source = data || root.WHO_LMS_DATA;
+    if (!source || !source[sex] || ageMonths < source.firstMonth || ageMonths > source.lastMonth) return null;
+    const row = source[sex][ageMonths - source.firstMonth];
+    return row ? { l: row[0], m: row[1], s: row[2] } : null;
+  }
+
+  function classifyZ(z) {
+    if (z < -3) return { key: "severeThin", ...CLASSIFICATIONS.severeThin };
+    if (z < -2) return { key: "thin", ...CLASSIFICATIONS.thin };
+    if (z <= 1) return { key: "adequate", ...CLASSIFICATIONS.adequate };
+    if (z <= 2) return { key: "overweight", ...CLASSIFICATIONS.overweight };
+    if (z <= 3) return { key: "obesity", ...CLASSIFICATIONS.obesity };
+    return { key: "severeObesity", ...CLASSIFICATIONS.severeObesity };
+  }
+
+  function formatNumber(value, decimals) {
+    return new Intl.NumberFormat("pt-BR", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    }).format(value);
+  }
+
+  function formatZ(z) {
+    const prefix = z > 0 ? "+" : z < 0 ? "−" : "";
+    return `${prefix}${formatNumber(Math.abs(z), 2)}`;
+  }
+
+  function plural(value, singular, pluralForm) {
+    return `${value} ${value === 1 ? singular : pluralForm}`;
+  }
+
+  function formatAge(age) {
+    return `${plural(age.years, "ano", "anos")} e ${plural(age.months, "mês", "meses")}`;
+  }
+
+  function validate(values) {
+    const errors = {};
+    if (!values.sex) errors.sex = "Selecione a curva correspondente para continuar.";
+
+    const birth = parseDate(values.birthDate);
+    const assessment = parseDate(values.assessmentDate);
+    if (!birth) errors.birthDate = "Informe a data de nascimento.";
+    if (!assessment) errors.assessmentDate = "Informe a data da avaliação.";
+
+    let age = null;
+    if (birth && assessment) {
+      if (birth > assessment) {
+        errors.birthDate = "A data de nascimento não pode ser posterior à data da avaliação.";
+      } else {
+        age = calculateAge(birth, assessment);
+        if (age.totalMonths < MIN_MONTH || age.totalMonths > MAX_MONTH) {
+          errors.birthDate = "Esta calculadora foi desenvolvida para pessoas de 5 a 19 anos (até o 228º mês).";
+        }
+      }
+    }
+
+    const weight = parseBrazilianNumber(values.weight);
+    if (!Number.isFinite(weight)) errors.weight = "Informe o peso em quilogramas.";
+    else if (weight < 10 || weight > 300) errors.weight = "Confira o peso informado. Utilize um valor plausível entre 10 e 300 kg.";
+
+    const heightMeters = heightInMeters(values.height, values.heightUnit);
+    if (!Number.isFinite(heightMeters)) errors.height = "Informe uma altura válida.";
+    else if (heightMeters < 0.8 || heightMeters > 2.3) errors.height = "Confira a altura informada. Utilize um valor plausível entre 80 cm e 2,30 m.";
+
+    let bmi = null;
+    if (Number.isFinite(weight) && Number.isFinite(heightMeters) && weight > 0 && heightMeters > 0) {
+      bmi = calculateBmi(weight, heightMeters);
+      if (bmi < 7 || bmi > 100) errors.height = "Confira peso e altura: a combinação informada está fora dos limites plausíveis.";
+    }
+
+    return { valid: Object.keys(errors).length === 0, errors, birth, assessment, age, weight, heightMeters, bmi };
+  }
+
+  const api = {
+    MIN_MONTH,
+    MAX_MONTH,
+    parseDate,
+    calculateAge,
+    parseBrazilianNumber,
+    heightInMeters,
+    calculateBmi,
+    lmsValueAtZ,
+    calculateWhoZScore,
+    getLms,
+    classifyZ,
+    validate,
+    formatAge,
+    formatZ
+  };
+
+  root.IMCCalculator = api;
+  if (typeof module === "object" && module.exports) module.exports = api;
+  if (typeof document === "undefined") return;
+
+  const form = document.getElementById("imcForm");
+  const resultSection = document.getElementById("resultado");
+  const globalError = document.getElementById("globalError");
+  const assessmentDate = document.getElementById("assessmentDate");
+  const fields = {
+    birthDate: document.getElementById("birthDate"),
+    assessmentDate,
+    weight: document.getElementById("weight"),
+    height: document.getElementById("height")
+  };
+
+  assessmentDate.value = dateToInputValue(new Date());
+  fields.birthDate.max = assessmentDate.value;
+
+  function readValues() {
+    const formData = new FormData(form);
+    return {
+      name: String(formData.get("name") || "").trim(),
+      sex: String(formData.get("sex") || ""),
+      birthDate: String(formData.get("birthDate") || ""),
+      assessmentDate: String(formData.get("assessmentDate") || ""),
+      weight: String(formData.get("weight") || ""),
+      height: String(formData.get("height") || ""),
+      heightUnit: String(formData.get("heightUnit") || "cm")
+    };
+  }
+
+  function clearErrors() {
+    globalError.hidden = true;
+    globalError.textContent = "";
+    document.querySelectorAll(".field-error").forEach((element) => { element.textContent = ""; });
+    document.querySelectorAll("[aria-invalid='true']").forEach((element) => element.removeAttribute("aria-invalid"));
+    document.getElementById("sexGroup").removeAttribute("aria-invalid");
+  }
+
+  function showErrors(errors) {
+    clearErrors();
+    globalError.textContent = "Confira os dados informados antes de continuar.";
+    globalError.hidden = false;
+    globalError.focus();
+
+    Object.entries(errors).forEach(([key, message]) => {
+      const messageElement = document.getElementById(`${key}Error`);
+      if (messageElement) messageElement.textContent = message;
+      if (key === "sex") document.getElementById("sexGroup").setAttribute("aria-invalid", "true");
+      else if (fields[key]) fields[key].setAttribute("aria-invalid", "true");
+    });
+  }
+
+  function markerPosition(z) {
+    const clamped = Math.max(-4, Math.min(4, z));
+    return ((clamped + 4) / 8) * 100;
+  }
+
+  function updateClassificationStyle(key) {
+    const panel = document.querySelector(".classification-panel");
+    const styles = {
+      severeThin: ["#e7eef4", "#375f7a"],
+      thin: ["#dff1ff", "#176da9"],
+      adequate: ["#ddf6ee", "#169b78"],
+      overweight: ["#fff4cb", "#a77a00"],
+      obesity: ["#ffead6", "#bf671f"],
+      severeObesity: ["#fde1e5", "#b53f50"]
+    };
+    const [background, accent] = styles[key];
+    panel.style.background = background;
+    panel.style.borderColor = accent;
+    panel.querySelector(".classification-icon").style.background = accent;
+    panel.querySelector("h3").style.color = accent;
+  }
+
+  function renderResult(values, computed) {
+    const lms = getLms(values.sex, computed.age.totalMonths);
+    if (!lms) {
+      showErrors({ birthDate: "Não foi possível localizar a idade na referência da OMS." });
+      return;
+    }
+
+    const z = calculateWhoZScore(computed.bmi, lms.l, lms.m, lms.s);
+    const classification = classifyZ(z);
+    const safeName = values.name;
+
+    document.getElementById("resultName").textContent = safeName ? `Avaliação de ${safeName}` : "Avaliação sem identificação";
+    document.getElementById("resultBmi").textContent = formatNumber(computed.bmi, 1);
+    document.getElementById("resultAge").textContent = formatAge(computed.age);
+    document.getElementById("resultMonths").textContent = `${computed.age.totalMonths} meses completos`;
+    document.getElementById("resultWeight").textContent = `${formatNumber(computed.weight, 1)} kg`;
+    document.getElementById("resultHeight").textContent = `${formatNumber(computed.heightMeters, 2)} m`;
+    document.getElementById("resultZ").textContent = formatZ(z);
+    document.getElementById("resultClassification").textContent = classification.label;
+    document.getElementById("resultMessage").textContent = classification.message;
+    document.getElementById("chartZBadge").textContent = `z = ${formatZ(z)}`;
+    document.getElementById("zMarker").style.left = `${markerPosition(z)}%`;
+    document.getElementById("markerLabel").textContent = `Resultado: ${formatZ(z)}`;
+    updateClassificationStyle(classification.key);
+
+    resultSection.hidden = false;
+    requestAnimationFrame(() => resultSection.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+
+  function resetAll(focusForm) {
+    form.reset();
+    assessmentDate.value = dateToInputValue(new Date());
+    document.getElementById("heightUnit").value = "cm";
+    clearErrors();
+    resultSection.hidden = true;
+    if (focusForm) {
+      document.getElementById("calculadora").scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => document.getElementById("name").focus(), 450);
+    }
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const values = readValues();
+    const computed = validate(values);
+    if (!computed.valid) {
+      showErrors(computed.errors);
+      resultSection.hidden = true;
+      return;
+    }
+    clearErrors();
+    renderResult(values, computed);
+  });
+
+  document.getElementById("clearButton").addEventListener("click", () => resetAll(false));
+  document.getElementById("newAssessmentButton").addEventListener("click", () => resetAll(true));
+  document.getElementById("backToFormButton").addEventListener("click", () => {
+    document.getElementById("calculadora").scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById("name").focus({ preventScroll: true });
+  });
+
+  assessmentDate.addEventListener("change", () => {
+    fields.birthDate.max = assessmentDate.value || dateToInputValue(new Date());
+  });
+
+  document.getElementById("presentationButton").addEventListener("click", async () => {
+    const button = document.getElementById("presentationButton");
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+        button.innerHTML = '<span aria-hidden="true">×</span> Sair da apresentação';
+        button.setAttribute("aria-label", "Sair do modo apresentação");
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch (_) {
+      button.textContent = "Tela cheia indisponível";
+    }
+  });
+
+  document.addEventListener("fullscreenchange", () => {
+    const button = document.getElementById("presentationButton");
+    if (!document.fullscreenElement) {
+      button.innerHTML = '<span aria-hidden="true">⛶</span> Modo apresentação';
+      button.setAttribute("aria-label", "Ativar modo apresentação em tela cheia");
+    }
+  });
+})(typeof globalThis !== "undefined" ? globalThis : this);
+
+  </script>
+</body>
+</html>

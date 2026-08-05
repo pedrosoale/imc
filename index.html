@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#092b4c">
+  <meta name="description" content="Calculadora educativa de IMC por idade e sexo para crianças e adolescentes, baseada nas curvas da OMS.">
+  <title>O Peso da Estatística na Saúde</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#calculadora">Ir para a calculadora</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#inicio" aria-label="Voltar ao início">
+        <span class="brand-mark" aria-hidden="true">Σ</span>
+        <span><strong>Feira do Conhecimento</strong><small>Escola Esther Vianna Bologna</small></span>
+      </a>
+      <button class="presentation-button" id="presentationButton" type="button" aria-label="Ativar modo apresentação em tela cheia">
+        <span aria-hidden="true">⛶</span> Modo apresentação
+      </button>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-shape hero-shape-one" aria-hidden="true"></div>
+      <div class="hero-shape hero-shape-two" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> Matemática • Estatística • Saúde</p>
+          <h1 id="hero-title">O Peso da <em>Estatística</em> na Saúde</h1>
+          <p class="hero-subtitle">Calculadora educativa de IMC para crianças e adolescentes</p>
+          <p class="hero-description">Descubra como Matemática, crescimento e saúde podem ser analisados por meio dos dados.</p>
+          <a class="hero-cta" href="#calculadora">Começar avaliação <span aria-hidden="true">↓</span></a>
+        </div>
+
+        <div class="hero-visual" aria-label="Ilustração educativa com gráfico, régua e símbolos matemáticos">
+          <div class="visual-card">
+            <div class="visual-topline"><span>IMC por idade</span><span class="live-dot">OMS 2007</span></div>
+            <div class="chart" aria-hidden="true">
+              <span style="--h:38%"></span><span style="--h:57%"></span><span style="--h:47%"></span><span style="--h:78%"></span><span style="--h:66%"></span>
+              <i class="chart-curve"></i>
+              <b class="plot-dot dot-one"></b><b class="plot-dot dot-two"></b><b class="plot-dot dot-three"></b>
+            </div>
+            <div class="visual-formula"><small>Índice de Massa Corporal</small><strong>IMC = peso ÷ altura²</strong></div>
+          </div>
+          <span class="floating-symbol symbol-one" aria-hidden="true">x²</span>
+          <span class="floating-symbol symbol-two" aria-hidden="true">%</span>
+          <span class="floating-symbol symbol-three" aria-hidden="true">+1σ</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="education-strip" aria-label="Dados utilizados no cálculo">
+      <div class="education-grid">
+        <article class="education-card">
+          <span class="education-icon scale-icon" aria-hidden="true">kg</span>
+          <div><h2>Peso</h2><p>Medido em quilogramas.</p></div>
+          <span class="step-number">01</span>
+        </article>
+        <article class="education-card">
+          <span class="education-icon ruler-icon" aria-hidden="true">↔</span>
+          <div><h2>Altura</h2><p>Utilizada ao quadrado no cálculo.</p></div>
+          <span class="step-number">02</span>
+        </article>
+        <article class="education-card">
+          <span class="education-icon curve-icon" aria-hidden="true">⌁</span>
+          <div><h2>Idade e sexo</h2><p>Necessários para interpretar a curva de crescimento.</p></div>
+          <span class="step-number">03</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="calculator-section" id="calculadora" aria-labelledby="calculator-title">
+      <div class="section-heading">
+        <p class="eyebrow dark"><span></span> Sua vez de calcular</p>
+        <h2 id="calculator-title">Vamos aos dados?</h2>
+        <p>Preencha com atenção. Os campos marcados com <span aria-hidden="true">*</span><span class="sr-only">asterisco</span> são obrigatórios.</p>
+      </div>
+
+      <div class="privacy-badge"><span aria-hidden="true">✓</span><strong>Seus dados não são salvos</strong><small>O cálculo acontece somente neste dispositivo.</small></div>
+
+      <form class="calculator-card" id="imcForm" novalidate>
+        <div class="form-progress" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="global-error" id="globalError" role="alert" tabindex="-1" hidden></div>
+
+        <fieldset class="form-block">
+          <legend><span>1</span> Identificação <small>opcional</small></legend>
+          <div class="field full-field">
+            <label for="name">Nome, apelido ou código — opcional</label>
+            <input id="name" name="name" type="text" maxlength="60" autocomplete="off" placeholder="Ex.: Participante 12">
+            <p class="field-hint">Para preservar a privacidade, você pode utilizar somente um código ou deixar este campo vazio.</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-block">
+          <legend><span>2</span> Curva de crescimento <abbr title="campo obrigatório">*</abbr></legend>
+          <p class="fieldset-explanation">O dado é usado exclusivamente para selecionar a curva antropométrica correspondente. As curvas da OMS são diferentes para meninos e meninas.</p>
+          <div class="sex-options" id="sexGroup">
+            <label class="choice-card"><input type="radio" name="sex" value="male"><span class="choice-dot"></span><span><strong>Masculino</strong><small>Curva para meninos</small></span></label>
+            <label class="choice-card"><input type="radio" name="sex" value="female"><span class="choice-dot"></span><span><strong>Feminino</strong><small>Curva para meninas</small></span></label>
+          </div>
+          <p class="field-error" id="sexError"></p>
+        </fieldset>
+
+        <fieldset class="form-block">
+          <legend><span>3</span> Datas <abbr title="campos obrigatórios">*</abbr></legend>
+          <div class="form-grid">
+            <div class="field">
+              <label for="birthDate">Data de nascimento</label>
+              <input id="birthDate" name="birthDate" type="date" required aria-describedby="birthDateError">
+              <p class="field-error" id="birthDateError"></p>
+            </div>
+            <div class="field">
+              <label for="assessmentDate">Data da avaliação</label>
+              <input id="assessmentDate" name="assessmentDate" type="date" required aria-describedby="assessmentDateError">
+              <p class="field-error" id="assessmentDateError"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-block">
+          <legend><span>4</span> Medidas <abbr title="campos obrigatórios">*</abbr></legend>
+          <div class="form-grid measures-grid">
+            <div class="field">
+              <label for="weight">Peso</label>
+              <div class="input-with-unit"><input id="weight" name="weight" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex.: 42,5" aria-describedby="weightHint weightError"><span>kg</span></div>
+              <p class="field-hint" id="weightHint">Aceita vírgula ou ponto.</p>
+              <p class="field-error" id="weightError"></p>
+            </div>
+            <div class="field">
+              <label for="height">Altura</label>
+              <div class="height-input-row">
+                <input id="height" name="height" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex.: 145" aria-describedby="heightError">
+                <select id="heightUnit" name="heightUnit" aria-label="Unidade da altura">
+                  <option value="cm">centímetros</option>
+                  <option value="m">metros</option>
+                </select>
+              </div>
+              <p class="field-error" id="heightError"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button class="primary-button" type="submit">Calcular meu IMC <span aria-hidden="true">→</span></button>
+          <button class="secondary-button" id="clearButton" type="button"><span aria-hidden="true">↻</span> Limpar dados</button>
+        </div>
+        <p class="form-privacy"><span aria-hidden="true">◉</span> Nenhuma informação é enviada, armazenada ou adicionada a um histórico.</p>
+      </form>
+    </section>
+
+    <section class="result-section" id="resultado" aria-labelledby="result-title" aria-live="polite" hidden>
+      <div class="result-card" id="resultCard">
+        <div class="result-heading">
+          <div><p class="eyebrow result-eyebrow"><span></span> Análise concluída</p><h2 id="result-title">Seu resultado</h2><p id="resultName"></p></div>
+          <div class="result-bmi"><small>IMC calculado</small><strong id="resultBmi">—</strong><span>kg/m²</span></div>
+        </div>
+
+        <div class="result-summary">
+          <div><span>Idade</span><strong id="resultAge">—</strong><small id="resultMonths">—</small></div>
+          <div><span>Peso</span><strong id="resultWeight">—</strong></div>
+          <div><span>Altura</span><strong id="resultHeight">—</strong></div>
+          <div><span>Escore-z</span><strong id="resultZ">—</strong><small>IMC por idade</small></div>
+        </div>
+
+        <div class="classification-panel">
+          <div class="classification-icon" aria-hidden="true">◎</div>
+          <div><small>Classificação na curva de crescimento</small><h3 id="resultClassification">—</h3><p id="resultMessage">—</p></div>
+        </div>
+
+        <div class="z-chart" aria-labelledby="chart-title">
+          <div class="chart-heading"><div><h3 id="chart-title">Onde o resultado aparece na curva</h3><p>Representação educativa do escore-z calculado.</p></div><span id="chartZBadge">z = —</span></div>
+          <div class="z-scale-scroll" tabindex="0" aria-label="Régua horizontal de classificação por escore-z">
+            <div class="z-scale" id="zScale">
+              <div class="z-marker" id="zMarker"><span id="markerLabel">Você está aqui</span><i></i></div>
+              <div class="z-bands">
+                <span class="band severe-thin">Magreza<br>acentuada</span>
+                <span class="band thin">Magreza</span>
+                <span class="band adequate">Faixa adequada</span>
+                <span class="band overweight">Sobrepeso</span>
+                <span class="band obesity">Obesidade</span>
+                <span class="band severe-obesity">Obesidade<br>grave</span>
+              </div>
+              <div class="z-ticks"><span style="left:12.5%">−3</span><span style="left:25%">−2</span><span style="left:62.5%">+1</span><span style="left:75%">+2</span><span style="left:87.5%">+3</span></div>
+            </div>
+          </div>
+          <p class="chart-note"><span aria-hidden="true">i</span> O cálculo usa parâmetros LMS oficiais incorporados ao sistema. O gráfico é uma representação educativa.</p>
+        </div>
+
+        <div class="result-guidance"><strong>Uma medida é um ponto da história, não a história inteira.</strong><p>Observe o crescimento ao longo do tempo e converse com um profissional de saúde quando houver dúvidas.</p></div>
+        <div class="result-actions">
+          <button class="primary-button" id="newAssessmentButton" type="button">Iniciar nova avaliação <span aria-hidden="true">↻</span></button>
+          <button class="secondary-button" id="backToFormButton" type="button">Rever dados</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-section" aria-labelledby="how-title">
+      <div class="how-inner">
+        <div class="how-copy">
+          <p class="eyebrow dark"><span></span> Entenda o cálculo</p>
+          <h2 id="how-title">Da medida à informação</h2>
+          <p>Primeiro dividimos o peso pela altura ao quadrado. Depois comparamos o resultado com crianças ou adolescentes da mesma idade e sexo, utilizando uma curva de crescimento.</p>
+          <div class="formula-card"><span>Fórmula do IMC</span><strong>IMC = <span class="fraction"><i>peso (kg)</i><i>altura (m) × altura (m)</i></span></strong></div>
+        </div>
+        <ol class="calculation-steps">
+          <li><span>1</span><div><strong>Transforme a altura</strong><p>145 cm se transforma em 1,45 m.</p></div></li>
+          <li><span>2</span><div><strong>Calcule o IMC</strong><p>42,5 ÷ (1,45 × 1,45) = 20,2 kg/m².</p></div></li>
+          <li><span>3</span><div><strong>Consulte a curva</strong><p>O resultado é comparado por idade em meses e sexo.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="notice-section" aria-label="Aviso educativo importante">
+      <div class="notice-card"><span class="notice-icon" aria-hidden="true">!</span><div><h2>Importante: esta ferramenta não faz diagnóstico</h2><p>Esta calculadora tem finalidade exclusivamente educativa. O IMC é um indicador de triagem e não fornece diagnóstico. A avaliação da saúde de crianças e adolescentes deve considerar crescimento, desenvolvimento, composição corporal, alimentação, atividade física, condições clínicas e contexto familiar. Procure um profissional de saúde para uma avaliação individual.</p></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>Feira do Conhecimento</strong><p>Escola Esther Vianna Bologna</p></div>
+      <p>Projeto interdisciplinar de <strong>Matemática, Ciências e Educação Física</strong></p>
+      <p class="footer-reference">Referência: curvas de crescimento da Organização Mundial da Saúde — OMS 2007. Finalidade educativa.</p>
+    </div>
+  </footer>
+
+  <script src="who-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
