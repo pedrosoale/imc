@@ -22,6 +22,7 @@ Abra `index-unico.html`. Essa versão contém estilos, dados da OMS e JavaScript
 imc/
 ├── index.html          # Página principal
 ├── index-unico.html    # Versão completa em um único arquivo
+├── logo-escola.png     # Identidade visual da escola no cabeçalho
 ├── style.css           # Identidade visual e responsividade
 ├── who-data.js         # Parâmetros LMS oficiais incorporados
 ├── script.js           # Validação, cálculos e interações
