@@ -1,6 +1,6 @@
 # O Peso da Estatística na Saúde
 
-Calculadora educativa de IMC por idade e sexo para a **Feira do Conhecimento da Escola Esther Vianna Bologna**. O projeto foi pensado para uso em notebook, televisão, projetor, tablet ou celular e funciona sem internet, servidor, cadastro ou banco de dados.
+Calculadora educativa de IMC para crianças, adolescentes e adultos, para a **Feira do Conhecimento da Escola Esther Vianna Bologna**. O projeto foi pensado para uso em notebook, televisão, projetor, tablet ou celular e funciona sem internet, servidor, cadastro ou banco de dados.
 
 > **Aviso:** o IMC é um indicador de triagem. Esta ferramenta não estabelece diagnóstico e não substitui avaliação médica ou nutricional.
 
@@ -44,7 +44,12 @@ A idade é obtida pela diferença entre a data de nascimento e a data da avalia�
 
 ## Classificação por idade e sexo
 
-As faixas fixas usadas em adultos **não são utilizadas**. Para cada sexo e mês de idade, a aplicação seleciona três parâmetros:
+A aplicação atende dois públicos com métodos diferentes, escolhidos automaticamente a partir da idade calculada:
+
+- **5 a 19 anos completos (60 a 228 meses):** classificação por escore-z na curva de crescimento da OMS, específica por sexo e mês de idade. As faixas fixas usadas em adultos **não são utilizadas** nessa faixa etária.
+- **19 anos completos ou mais:** classificação direta pelas faixas de IMC padrão da OMS para adultos, iguais para os dois sexos e **sem uso de escore-z** (o método LMS por idade não se aplica a adultos). A tela de resultado exibe um aviso indicando que se trata de uma avaliação adulta.
+
+Para cada sexo e mês de idade (crianças e adolescentes), a aplicação seleciona três parâmetros:
 
 - **L:** potência Box-Cox, que trata a assimetria da distribuição;
 - **M:** mediana do IMC na idade e sexo selecionados;
@@ -74,6 +79,17 @@ Os pontos de corte implementados são:
 | `+1 < z ≤ +2` | Sobrepeso |
 | `+2 < z ≤ +3` | Obesidade |
 | `z > +3` | Obesidade grave |
+
+Para 19 anos completos ou mais, os pontos de corte são os padrões da OMS para adultos, aplicados diretamente sobre o IMC (sem escore-z):
+
+| IMC (kg/m²) | Classificação |
+|---:|---|
+| `< 18,5` | Abaixo do peso |
+| `18,5 – 24,9` | Peso adequado |
+| `25,0 – 29,9` | Sobrepeso |
+| `30,0 – 34,9` | Obesidade grau I |
+| `35,0 – 39,9` | Obesidade grau II |
+| `≥ 40,0` | Obesidade grau III |
 
 ## Fonte dos dados da OMS
 
@@ -131,7 +147,7 @@ Para uma verificação adicional, compare casos com o software **WHO AnthroPlus*
 - Use a mesma idade e IMC nas opções masculino e feminino; o escore-z deve mudar.
 - Teste datas com 29 de fevereiro.
 - Tente calcular com campos vazios, datas invertidas, peso negativo e altura fora dos limites.
-- Teste idades com 60, 228, 59 e 229 meses.
+- Teste idades com 59 meses (deve rejeitar), 60 e 228 meses (curva OMS por idade/sexo) e 229 meses (avaliação adulta, sem escore-z).
 - Pressione Tab para percorrer todos os controles e conferir o foco visível.
 - Ative **Modo apresentação** e saia com Esc.
 - Calcule e use **Limpar dados** e **Iniciar nova avaliação**; não deve restar resultado anterior.
@@ -139,7 +155,7 @@ Para uma verificação adicional, compare casos com o software **WHO AnthroPlus*
 
 ## Limitações
 
-- A ferramenta atende apenas de **60 a 228 meses completos** (do quinto aniversário até 19 anos completos). O limite superior segue a extensão publicada da referência da OMS.
+- A ferramenta exige **idade mínima de 60 meses completos** (a partir do quinto aniversário). Entre 60 e 228 meses (até 19 anos completos), usa a curva de crescimento da OMS por idade e sexo; a partir de 229 meses (19 anos completos ou mais), usa as faixas de IMC padrão da OMS para adultos, sem escore-z.
 - O valor representa uma medição pontual e pode ser afetado por erro de balança, postura, roupa, horário e digitação.
 - O IMC não mede diretamente gordura corporal, massa muscular, maturação puberal, alimentação ou saúde clínica.
 - A categoria “obesidade grave” (`z > +3`) foi incluída conforme a especificação educativa do projeto; as páginas resumidas da OMS destacam principalmente sobrepeso acima de +1 e obesidade acima de +2.

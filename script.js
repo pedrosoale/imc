@@ -19,6 +19,7 @@
   const MS_PER_DAY = 86_400_000;
   const MIN_MONTH = 60;
   const MAX_MONTH = 228;
+  const MAX_PLAUSIBLE_MONTH = 1560; // 130 anos — checagem de plausibilidade, não um limite normativo
 
   const CLASSIFICATIONS = {
     severeThin: {
@@ -44,6 +45,35 @@
     severeObesity: {
       label: "Obesidade grave",
       message: "O resultado ficou muito acima da faixa de referência para idade e sexo. É importante procurar avaliação profissional para uma análise completa, respeitosa e individualizada."
+    }
+  };
+
+  // Faixas de IMC para adultos (19 anos completos ou mais) — classificação padrão da OMS,
+  // única para os dois sexos e sem uso de escore-z (que se aplica apenas a crianças e adolescentes).
+  const ADULT_CLASSIFICATIONS = {
+    underweight: {
+      label: "Abaixo do peso",
+      message: "O IMC ficou abaixo da faixa considerada adequada para adultos. Uma única medição não estabelece diagnóstico; é recomendável conversar com um profissional de saúde."
+    },
+    normal: {
+      label: "Peso adequado",
+      message: "O IMC está dentro da faixa considerada adequada para adultos. Continue valorizando alimentação variada, atividade física e sono adequado."
+    },
+    overweight: {
+      label: "Sobrepeso",
+      message: "O IMC ficou acima da faixa considerada adequada para adultos. Isso não representa um diagnóstico isolado; a avaliação completa deve considerar alimentação, atividade física e acompanhamento profissional."
+    },
+    obesityI: {
+      label: "Obesidade grau I",
+      message: "O IMC ficou na faixa de obesidade grau I para adultos. Recomenda-se buscar orientação profissional para uma avaliação completa e individualizada."
+    },
+    obesityII: {
+      label: "Obesidade grau II",
+      message: "O IMC ficou na faixa de obesidade grau II para adultos. É importante procurar avaliação profissional para uma análise completa e individualizada."
+    },
+    obesityIII: {
+      label: "Obesidade grau III",
+      message: "O IMC ficou na faixa de obesidade grau III para adultos. É importante procurar avaliação profissional para uma análise completa e individualizada."
     }
   };
 
@@ -136,6 +166,19 @@
     return { key: "severeObesity", ...CLASSIFICATIONS.severeObesity };
   }
 
+  function isAdultAge(totalMonths) {
+    return totalMonths > MAX_MONTH;
+  }
+
+  function classifyAdultBmi(bmi) {
+    if (bmi < 18.5) return { key: "underweight", ...ADULT_CLASSIFICATIONS.underweight };
+    if (bmi < 25) return { key: "normal", ...ADULT_CLASSIFICATIONS.normal };
+    if (bmi < 30) return { key: "overweight", ...ADULT_CLASSIFICATIONS.overweight };
+    if (bmi < 35) return { key: "obesityI", ...ADULT_CLASSIFICATIONS.obesityI };
+    if (bmi < 40) return { key: "obesityII", ...ADULT_CLASSIFICATIONS.obesityII };
+    return { key: "obesityIII", ...ADULT_CLASSIFICATIONS.obesityIII };
+  }
+
   function formatNumber(value, decimals) {
     return new Intl.NumberFormat("pt-BR", {
       minimumFractionDigits: decimals,
@@ -171,8 +214,10 @@
         errors.birthDate = "A data de nascimento não pode ser posterior à data da avaliação.";
       } else {
         age = calculateAge(birth, assessment);
-        if (age.totalMonths < MIN_MONTH || age.totalMonths > MAX_MONTH) {
-          errors.birthDate = "Esta calculadora foi desenvolvida para pessoas de 5 a 19 anos (até o 228º mês).";
+        if (age.totalMonths < MIN_MONTH) {
+          errors.birthDate = `Esta calculadora exige idade mínima de 5 anos completos (${MIN_MONTH} meses).`;
+        } else if (age.totalMonths > MAX_PLAUSIBLE_MONTH) {
+          errors.birthDate = "Confira a data de nascimento informada.";
         }
       }
     }
@@ -197,6 +242,7 @@
   const api = {
     MIN_MONTH,
     MAX_MONTH,
+    MAX_PLAUSIBLE_MONTH,
     parseDate,
     calculateAge,
     parseBrazilianNumber,
@@ -206,6 +252,8 @@
     calculateWhoZScore,
     getLms,
     classifyZ,
+    isAdultAge,
+    classifyAdultBmi,
     validate,
     formatAge,
     formatZ
@@ -269,24 +317,44 @@
     return ((clamped + 4) / 8) * 100;
   }
 
-  function updateClassificationStyle(key) {
+  const CHILD_STYLES = {
+    severeThin: ["#e7eef4", "#375f7a"],
+    thin: ["#dff1ff", "#176da9"],
+    adequate: ["#ddf6ee", "#169b78"],
+    overweight: ["#fff4cb", "#a77a00"],
+    obesity: ["#ffead6", "#bf671f"],
+    severeObesity: ["#fde1e5", "#b53f50"]
+  };
+
+  const ADULT_STYLES = {
+    underweight: ["#dff1ff", "#176da9"],
+    normal: ["#ddf6ee", "#169b78"],
+    overweight: ["#fff4cb", "#a77a00"],
+    obesityI: ["#ffead6", "#bf671f"],
+    obesityII: ["#ffdcc2", "#a5501a"],
+    obesityIII: ["#fde1e5", "#b53f50"]
+  };
+
+  function updateClassificationStyle(key, adult) {
     const panel = document.querySelector(".classification-panel");
-    const styles = {
-      severeThin: ["#e7eef4", "#375f7a"],
-      thin: ["#dff1ff", "#176da9"],
-      adequate: ["#ddf6ee", "#169b78"],
-      overweight: ["#fff4cb", "#a77a00"],
-      obesity: ["#ffead6", "#bf671f"],
-      severeObesity: ["#fde1e5", "#b53f50"]
-    };
-    const [background, accent] = styles[key];
+    const [background, accent] = (adult ? ADULT_STYLES : CHILD_STYLES)[key];
     panel.style.background = background;
     panel.style.borderColor = accent;
     panel.querySelector(".classification-icon").style.background = accent;
     panel.querySelector("h3").style.color = accent;
   }
 
-  function renderResult(values, computed) {
+  function fillCommonResultFields(values, computed) {
+    const safeName = values.name;
+    document.getElementById("resultName").textContent = safeName ? `Avaliação de ${safeName}` : "Avaliação sem identificação";
+    document.getElementById("resultBmi").textContent = formatNumber(computed.bmi, 1);
+    document.getElementById("resultAge").textContent = formatAge(computed.age);
+    document.getElementById("resultMonths").textContent = `${computed.age.totalMonths} meses completos`;
+    document.getElementById("resultWeight").textContent = `${formatNumber(computed.weight, 1)} kg`;
+    document.getElementById("resultHeight").textContent = `${formatNumber(computed.heightMeters, 2)} m`;
+  }
+
+  function renderChildResult(values, computed) {
     const lms = getLms(values.sex, computed.age.totalMonths);
     if (!lms) {
       showErrors({ birthDate: "Não foi possível localizar a idade na referência da OMS." });
@@ -295,24 +363,45 @@
 
     const z = calculateWhoZScore(computed.bmi, lms.l, lms.m, lms.s);
     const classification = classifyZ(z);
-    const safeName = values.name;
 
-    document.getElementById("resultName").textContent = safeName ? `Avaliação de ${safeName}` : "Avaliação sem identificação";
-    document.getElementById("resultBmi").textContent = formatNumber(computed.bmi, 1);
-    document.getElementById("resultAge").textContent = formatAge(computed.age);
-    document.getElementById("resultMonths").textContent = `${computed.age.totalMonths} meses completos`;
-    document.getElementById("resultWeight").textContent = `${formatNumber(computed.weight, 1)} kg`;
-    document.getElementById("resultHeight").textContent = `${formatNumber(computed.heightMeters, 2)} m`;
+    fillCommonResultFields(values, computed);
+    document.getElementById("resultModeBadge").textContent = "Avaliação infantil/adolescente — curva da OMS por idade e sexo";
+    document.getElementById("resultModeBadge").className = "mode-badge mode-child";
+    document.getElementById("resultZRow").hidden = false;
     document.getElementById("resultZ").textContent = formatZ(z);
+    document.getElementById("classificationContextLabel").textContent = "Classificação na curva de crescimento";
     document.getElementById("resultClassification").textContent = classification.label;
     document.getElementById("resultMessage").textContent = classification.message;
+    document.getElementById("zChartSection").hidden = false;
     document.getElementById("chartZBadge").textContent = `z = ${formatZ(z)}`;
     document.getElementById("zMarker").style.left = `${markerPosition(z)}%`;
     document.getElementById("markerLabel").textContent = `Resultado: ${formatZ(z)}`;
-    updateClassificationStyle(classification.key);
+    updateClassificationStyle(classification.key, false);
 
     resultSection.hidden = false;
     requestAnimationFrame(() => resultSection.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+
+  function renderAdultResult(values, computed) {
+    const classification = classifyAdultBmi(computed.bmi);
+
+    fillCommonResultFields(values, computed);
+    document.getElementById("resultModeBadge").textContent = "Avaliação adulta (19 anos completos ou mais) — faixas de IMC da OMS, sem escore-z";
+    document.getElementById("resultModeBadge").className = "mode-badge mode-adult";
+    document.getElementById("resultZRow").hidden = true;
+    document.getElementById("classificationContextLabel").textContent = "Classificação por IMC — faixas padrão da OMS para adultos";
+    document.getElementById("resultClassification").textContent = classification.label;
+    document.getElementById("resultMessage").textContent = classification.message;
+    document.getElementById("zChartSection").hidden = true;
+    updateClassificationStyle(classification.key, true);
+
+    resultSection.hidden = false;
+    requestAnimationFrame(() => resultSection.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+
+  function renderResult(values, computed) {
+    if (isAdultAge(computed.age.totalMonths)) renderAdultResult(values, computed);
+    else renderChildResult(values, computed);
   }
 
   function resetAll(focusForm) {

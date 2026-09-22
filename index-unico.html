@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#092b4c">
-  <meta name="description" content="Calculadora educativa de IMC por idade e sexo para crianças e adolescentes, baseada nas curvas da OMS.">
+  <meta name="description" content="Calculadora educativa de IMC para crianças, adolescentes e adultos: curvas por idade e sexo da OMS até 19 anos e faixas padrão da OMS para adultos.">
   <title>O Peso da Estatística na Saúde — versão offline</title>
+  <link rel="icon" type="image/png" href="data:image/png;base64,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">
   <style>
 :root {
   --navy-950: #061c31;
@@ -166,7 +167,11 @@ a { color: inherit; }
 .result-heading { padding: 0 0 30px; display: flex; align-items: center; justify-content: space-between; gap: 30px; border-bottom: 1px solid var(--line); }
 .result-eyebrow { margin-bottom: 10px; color: var(--green-600); }
 .result-heading h2 { margin: 0; color: var(--navy-900); font-size: 38px; line-height: 1; }
-.result-heading p:last-child { margin: 8px 0 0; color: var(--muted); }
+#resultName { margin: 8px 0 0; color: var(--muted); }
+.mode-badge { display: inline-flex; align-items: center; margin: 10px 0 0; padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 800; letter-spacing: .01em; width: fit-content; }
+.mode-badge:empty { display: none; }
+.mode-badge.mode-child { color: var(--green-600); background: var(--green-100); }
+.mode-badge.mode-adult { color: var(--blue-600); background: var(--blue-100); }
 .result-bmi { min-width: 185px; padding: 17px 20px; border-radius: 18px; text-align: right; color: var(--white); background: linear-gradient(135deg, var(--blue-600), var(--navy-800)); }
 .result-bmi small, .result-bmi strong { display: block; }
 .result-bmi small { color: #cfe9fa; font-size: 12px; }
@@ -326,7 +331,7 @@ a { color: inherit; }
         <div class="hero-copy">
           <p class="eyebrow"><span></span> Matemática • Estatística • Saúde</p>
           <h1 id="hero-title">O Peso da <em>Estatística</em> na Saúde</h1>
-          <p class="hero-subtitle">Calculadora educativa de IMC para crianças e adolescentes</p>
+          <p class="hero-subtitle">Calculadora educativa de IMC para crianças, adolescentes e adultos</p>
           <p class="hero-description">Descubra como Matemática, crescimento e saúde podem ser analisados por meio dos dados.</p>
           <a class="hero-cta" href="#calculadora">Começar avaliação <span aria-hidden="true">↓</span></a>
         </div>
@@ -392,7 +397,7 @@ a { color: inherit; }
 
         <fieldset class="form-block">
           <legend><span>2</span> Curva de crescimento <abbr title="campo obrigatório">*</abbr></legend>
-          <p class="fieldset-explanation">O dado é usado exclusivamente para selecionar a curva antropométrica correspondente. As curvas da OMS são diferentes para meninos e meninas.</p>
+          <p class="fieldset-explanation">Para idades entre 5 e 19 anos, o dado seleciona a curva de crescimento da OMS, que é diferente para meninos e meninas. Para 19 anos completos ou mais, o IMC é classificado pelas faixas padrão da OMS para adultos, iguais para os dois sexos.</p>
           <div class="sex-options" id="sexGroup">
             <label class="choice-card"><input type="radio" name="sex" value="male"><span class="choice-dot"></span><span><strong>Masculino</strong><small>Curva para meninos</small></span></label>
             <label class="choice-card"><input type="radio" name="sex" value="female"><span class="choice-dot"></span><span><strong>Feminino</strong><small>Curva para meninas</small></span></label>
@@ -450,7 +455,7 @@ a { color: inherit; }
     <section class="result-section" id="resultado" aria-labelledby="result-title" aria-live="polite" hidden>
       <div class="result-card" id="resultCard">
         <div class="result-heading">
-          <div><p class="eyebrow result-eyebrow"><span></span> Análise concluída</p><h2 id="result-title">Seu resultado</h2><p id="resultName"></p></div>
+          <div><p class="eyebrow result-eyebrow"><span></span> Análise concluída</p><h2 id="result-title">Seu resultado</h2><p id="resultName"></p><p class="mode-badge" id="resultModeBadge"></p></div>
           <div class="result-bmi"><small>IMC calculado</small><strong id="resultBmi">—</strong><span>kg/m²</span></div>
         </div>
 
@@ -458,15 +463,15 @@ a { color: inherit; }
           <div><span>Idade</span><strong id="resultAge">—</strong><small id="resultMonths">—</small></div>
           <div><span>Peso</span><strong id="resultWeight">—</strong></div>
           <div><span>Altura</span><strong id="resultHeight">—</strong></div>
-          <div><span>Escore-z</span><strong id="resultZ">—</strong><small>IMC por idade</small></div>
+          <div id="resultZRow"><span>Escore-z</span><strong id="resultZ">—</strong><small>IMC por idade</small></div>
         </div>
 
         <div class="classification-panel">
           <div class="classification-icon" aria-hidden="true">◎</div>
-          <div><small>Classificação na curva de crescimento</small><h3 id="resultClassification">—</h3><p id="resultMessage">—</p></div>
+          <div><small id="classificationContextLabel">Classificação na curva de crescimento</small><h3 id="resultClassification">—</h3><p id="resultMessage">—</p></div>
         </div>
 
-        <div class="z-chart" aria-labelledby="chart-title">
+        <div class="z-chart" id="zChartSection" aria-labelledby="chart-title">
           <div class="chart-heading"><div><h3 id="chart-title">Onde o resultado aparece na curva</h3><p>Representação educativa do escore-z calculado.</p></div><span id="chartZBadge">z = —</span></div>
           <div class="z-scale-scroll" tabindex="0" aria-label="Régua horizontal de classificação por escore-z">
             <div class="z-scale" id="zScale">
@@ -510,7 +515,7 @@ a { color: inherit; }
     </section>
 
     <section class="notice-section" aria-label="Aviso educativo importante">
-      <div class="notice-card"><span class="notice-icon" aria-hidden="true">!</span><div><h2>Importante: esta ferramenta não faz diagnóstico</h2><p>Esta calculadora tem finalidade exclusivamente educativa. O IMC é um indicador de triagem e não fornece diagnóstico. A avaliação da saúde de crianças e adolescentes deve considerar crescimento, desenvolvimento, composição corporal, alimentação, atividade física, condições clínicas e contexto familiar. Procure um profissional de saúde para uma avaliação individual.</p></div></div>
+      <div class="notice-card"><span class="notice-icon" aria-hidden="true">!</span><div><h2>Importante: esta ferramenta não faz diagnóstico</h2><p>Esta calculadora tem finalidade exclusivamente educativa. O IMC é um indicador de triagem e não fornece diagnóstico. Em crianças e adolescentes (5 a 19 anos), a avaliação da saúde deve considerar crescimento, desenvolvimento, composição corporal, alimentação, atividade física, condições clínicas e contexto familiar. Em adultos, o IMC também não mede diretamente gordura corporal ou saúde clínica. Procure um profissional de saúde para uma avaliação individual.</p></div></div>
     </section>
   </main>
 
@@ -547,6 +552,7 @@ a { color: inherit; }
   const MS_PER_DAY = 86_400_000;
   const MIN_MONTH = 60;
   const MAX_MONTH = 228;
+  const MAX_PLAUSIBLE_MONTH = 1560; // 130 anos — checagem de plausibilidade, não um limite normativo
 
   const CLASSIFICATIONS = {
     severeThin: {
@@ -572,6 +578,35 @@ a { color: inherit; }
     severeObesity: {
       label: "Obesidade grave",
       message: "O resultado ficou muito acima da faixa de referência para idade e sexo. É importante procurar avaliação profissional para uma análise completa, respeitosa e individualizada."
+    }
+  };
+
+  // Faixas de IMC para adultos (19 anos completos ou mais) — classificação padrão da OMS,
+  // única para os dois sexos e sem uso de escore-z (que se aplica apenas a crianças e adolescentes).
+  const ADULT_CLASSIFICATIONS = {
+    underweight: {
+      label: "Abaixo do peso",
+      message: "O IMC ficou abaixo da faixa considerada adequada para adultos. Uma única medição não estabelece diagnóstico; é recomendável conversar com um profissional de saúde."
+    },
+    normal: {
+      label: "Peso adequado",
+      message: "O IMC está dentro da faixa considerada adequada para adultos. Continue valorizando alimentação variada, atividade física e sono adequado."
+    },
+    overweight: {
+      label: "Sobrepeso",
+      message: "O IMC ficou acima da faixa considerada adequada para adultos. Isso não representa um diagnóstico isolado; a avaliação completa deve considerar alimentação, atividade física e acompanhamento profissional."
+    },
+    obesityI: {
+      label: "Obesidade grau I",
+      message: "O IMC ficou na faixa de obesidade grau I para adultos. Recomenda-se buscar orientação profissional para uma avaliação completa e individualizada."
+    },
+    obesityII: {
+      label: "Obesidade grau II",
+      message: "O IMC ficou na faixa de obesidade grau II para adultos. É importante procurar avaliação profissional para uma análise completa e individualizada."
+    },
+    obesityIII: {
+      label: "Obesidade grau III",
+      message: "O IMC ficou na faixa de obesidade grau III para adultos. É importante procurar avaliação profissional para uma análise completa e individualizada."
     }
   };
 
@@ -664,6 +699,19 @@ a { color: inherit; }
     return { key: "severeObesity", ...CLASSIFICATIONS.severeObesity };
   }
 
+  function isAdultAge(totalMonths) {
+    return totalMonths > MAX_MONTH;
+  }
+
+  function classifyAdultBmi(bmi) {
+    if (bmi < 18.5) return { key: "underweight", ...ADULT_CLASSIFICATIONS.underweight };
+    if (bmi < 25) return { key: "normal", ...ADULT_CLASSIFICATIONS.normal };
+    if (bmi < 30) return { key: "overweight", ...ADULT_CLASSIFICATIONS.overweight };
+    if (bmi < 35) return { key: "obesityI", ...ADULT_CLASSIFICATIONS.obesityI };
+    if (bmi < 40) return { key: "obesityII", ...ADULT_CLASSIFICATIONS.obesityII };
+    return { key: "obesityIII", ...ADULT_CLASSIFICATIONS.obesityIII };
+  }
+
   function formatNumber(value, decimals) {
     return new Intl.NumberFormat("pt-BR", {
       minimumFractionDigits: decimals,
@@ -699,8 +747,10 @@ a { color: inherit; }
         errors.birthDate = "A data de nascimento não pode ser posterior à data da avaliação.";
       } else {
         age = calculateAge(birth, assessment);
-        if (age.totalMonths < MIN_MONTH || age.totalMonths > MAX_MONTH) {
-          errors.birthDate = "Esta calculadora foi desenvolvida para pessoas de 5 a 19 anos (até o 228º mês).";
+        if (age.totalMonths < MIN_MONTH) {
+          errors.birthDate = `Esta calculadora exige idade mínima de 5 anos completos (${MIN_MONTH} meses).`;
+        } else if (age.totalMonths > MAX_PLAUSIBLE_MONTH) {
+          errors.birthDate = "Confira a data de nascimento informada.";
         }
       }
     }
@@ -725,6 +775,7 @@ a { color: inherit; }
   const api = {
     MIN_MONTH,
     MAX_MONTH,
+    MAX_PLAUSIBLE_MONTH,
     parseDate,
     calculateAge,
     parseBrazilianNumber,
@@ -734,6 +785,8 @@ a { color: inherit; }
     calculateWhoZScore,
     getLms,
     classifyZ,
+    isAdultAge,
+    classifyAdultBmi,
     validate,
     formatAge,
     formatZ
@@ -797,24 +850,44 @@ a { color: inherit; }
     return ((clamped + 4) / 8) * 100;
   }
 
-  function updateClassificationStyle(key) {
+  const CHILD_STYLES = {
+    severeThin: ["#e7eef4", "#375f7a"],
+    thin: ["#dff1ff", "#176da9"],
+    adequate: ["#ddf6ee", "#169b78"],
+    overweight: ["#fff4cb", "#a77a00"],
+    obesity: ["#ffead6", "#bf671f"],
+    severeObesity: ["#fde1e5", "#b53f50"]
+  };
+
+  const ADULT_STYLES = {
+    underweight: ["#dff1ff", "#176da9"],
+    normal: ["#ddf6ee", "#169b78"],
+    overweight: ["#fff4cb", "#a77a00"],
+    obesityI: ["#ffead6", "#bf671f"],
+    obesityII: ["#ffdcc2", "#a5501a"],
+    obesityIII: ["#fde1e5", "#b53f50"]
+  };
+
+  function updateClassificationStyle(key, adult) {
     const panel = document.querySelector(".classification-panel");
-    const styles = {
-      severeThin: ["#e7eef4", "#375f7a"],
-      thin: ["#dff1ff", "#176da9"],
-      adequate: ["#ddf6ee", "#169b78"],
-      overweight: ["#fff4cb", "#a77a00"],
-      obesity: ["#ffead6", "#bf671f"],
-      severeObesity: ["#fde1e5", "#b53f50"]
-    };
-    const [background, accent] = styles[key];
+    const [background, accent] = (adult ? ADULT_STYLES : CHILD_STYLES)[key];
     panel.style.background = background;
     panel.style.borderColor = accent;
     panel.querySelector(".classification-icon").style.background = accent;
     panel.querySelector("h3").style.color = accent;
   }
 
-  function renderResult(values, computed) {
+  function fillCommonResultFields(values, computed) {
+    const safeName = values.name;
+    document.getElementById("resultName").textContent = safeName ? `Avaliação de ${safeName}` : "Avaliação sem identificação";
+    document.getElementById("resultBmi").textContent = formatNumber(computed.bmi, 1);
+    document.getElementById("resultAge").textContent = formatAge(computed.age);
+    document.getElementById("resultMonths").textContent = `${computed.age.totalMonths} meses completos`;
+    document.getElementById("resultWeight").textContent = `${formatNumber(computed.weight, 1)} kg`;
+    document.getElementById("resultHeight").textContent = `${formatNumber(computed.heightMeters, 2)} m`;
+  }
+
+  function renderChildResult(values, computed) {
     const lms = getLms(values.sex, computed.age.totalMonths);
     if (!lms) {
       showErrors({ birthDate: "Não foi possível localizar a idade na referência da OMS." });
@@ -823,24 +896,45 @@ a { color: inherit; }
 
     const z = calculateWhoZScore(computed.bmi, lms.l, lms.m, lms.s);
     const classification = classifyZ(z);
-    const safeName = values.name;
 
-    document.getElementById("resultName").textContent = safeName ? `Avaliação de ${safeName}` : "Avaliação sem identificação";
-    document.getElementById("resultBmi").textContent = formatNumber(computed.bmi, 1);
-    document.getElementById("resultAge").textContent = formatAge(computed.age);
-    document.getElementById("resultMonths").textContent = `${computed.age.totalMonths} meses completos`;
-    document.getElementById("resultWeight").textContent = `${formatNumber(computed.weight, 1)} kg`;
-    document.getElementById("resultHeight").textContent = `${formatNumber(computed.heightMeters, 2)} m`;
+    fillCommonResultFields(values, computed);
+    document.getElementById("resultModeBadge").textContent = "Avaliação infantil/adolescente — curva da OMS por idade e sexo";
+    document.getElementById("resultModeBadge").className = "mode-badge mode-child";
+    document.getElementById("resultZRow").hidden = false;
     document.getElementById("resultZ").textContent = formatZ(z);
+    document.getElementById("classificationContextLabel").textContent = "Classificação na curva de crescimento";
     document.getElementById("resultClassification").textContent = classification.label;
     document.getElementById("resultMessage").textContent = classification.message;
+    document.getElementById("zChartSection").hidden = false;
     document.getElementById("chartZBadge").textContent = `z = ${formatZ(z)}`;
     document.getElementById("zMarker").style.left = `${markerPosition(z)}%`;
     document.getElementById("markerLabel").textContent = `Resultado: ${formatZ(z)}`;
-    updateClassificationStyle(classification.key);
+    updateClassificationStyle(classification.key, false);
 
     resultSection.hidden = false;
     requestAnimationFrame(() => resultSection.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+
+  function renderAdultResult(values, computed) {
+    const classification = classifyAdultBmi(computed.bmi);
+
+    fillCommonResultFields(values, computed);
+    document.getElementById("resultModeBadge").textContent = "Avaliação adulta (19 anos completos ou mais) — faixas de IMC da OMS, sem escore-z";
+    document.getElementById("resultModeBadge").className = "mode-badge mode-adult";
+    document.getElementById("resultZRow").hidden = true;
+    document.getElementById("classificationContextLabel").textContent = "Classificação por IMC — faixas padrão da OMS para adultos";
+    document.getElementById("resultClassification").textContent = classification.label;
+    document.getElementById("resultMessage").textContent = classification.message;
+    document.getElementById("zChartSection").hidden = true;
+    updateClassificationStyle(classification.key, true);
+
+    resultSection.hidden = false;
+    requestAnimationFrame(() => resultSection.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+
+  function renderResult(values, computed) {
+    if (isAdultAge(computed.age.totalMonths)) renderAdultResult(values, computed);
+    else renderChildResult(values, computed);
   }
 
   function resetAll(focusForm) {
@@ -902,7 +996,6 @@ a { color: inherit; }
     }
   });
 })(typeof globalThis !== "undefined" ? globalThis : this);
-
-  </script>
+</script>
 </body>
 </html>

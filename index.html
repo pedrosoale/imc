@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#092b4c">
-  <meta name="description" content="Calculadora educativa de IMC por idade e sexo para crianças e adolescentes, baseada nas curvas da OMS.">
+  <meta name="description" content="Calculadora educativa de IMC para crianças, adolescentes e adultos: curvas por idade e sexo da OMS até 19 anos e faixas padrão da OMS para adultos.">
   <title>O Peso da Estatística na Saúde</title>
+  <link rel="icon" type="image/png" href="logo-escola.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -31,7 +32,7 @@
         <div class="hero-copy">
           <p class="eyebrow"><span></span> Matemática • Estatística • Saúde</p>
           <h1 id="hero-title">O Peso da <em>Estatística</em> na Saúde</h1>
-          <p class="hero-subtitle">Calculadora educativa de IMC para crianças e adolescentes</p>
+          <p class="hero-subtitle">Calculadora educativa de IMC para crianças, adolescentes e adultos</p>
           <p class="hero-description">Descubra como Matemática, crescimento e saúde podem ser analisados por meio dos dados.</p>
           <a class="hero-cta" href="#calculadora">Começar avaliação <span aria-hidden="true">↓</span></a>
         </div>
@@ -97,7 +98,7 @@
 
         <fieldset class="form-block">
           <legend><span>2</span> Curva de crescimento <abbr title="campo obrigatório">*</abbr></legend>
-          <p class="fieldset-explanation">O dado é usado exclusivamente para selecionar a curva antropométrica correspondente. As curvas da OMS são diferentes para meninos e meninas.</p>
+          <p class="fieldset-explanation">Para idades entre 5 e 19 anos, o dado seleciona a curva de crescimento da OMS, que é diferente para meninos e meninas. Para 19 anos completos ou mais, o IMC é classificado pelas faixas padrão da OMS para adultos, iguais para os dois sexos.</p>
           <div class="sex-options" id="sexGroup">
             <label class="choice-card"><input type="radio" name="sex" value="male"><span class="choice-dot"></span><span><strong>Masculino</strong><small>Curva para meninos</small></span></label>
             <label class="choice-card"><input type="radio" name="sex" value="female"><span class="choice-dot"></span><span><strong>Feminino</strong><small>Curva para meninas</small></span></label>
@@ -155,7 +156,7 @@
     <section class="result-section" id="resultado" aria-labelledby="result-title" aria-live="polite" hidden>
       <div class="result-card" id="resultCard">
         <div class="result-heading">
-          <div><p class="eyebrow result-eyebrow"><span></span> Análise concluída</p><h2 id="result-title">Seu resultado</h2><p id="resultName"></p></div>
+          <div><p class="eyebrow result-eyebrow"><span></span> Análise concluída</p><h2 id="result-title">Seu resultado</h2><p id="resultName"></p><p class="mode-badge" id="resultModeBadge"></p></div>
           <div class="result-bmi"><small>IMC calculado</small><strong id="resultBmi">—</strong><span>kg/m²</span></div>
         </div>
 
@@ -163,15 +164,15 @@
           <div><span>Idade</span><strong id="resultAge">—</strong><small id="resultMonths">—</small></div>
           <div><span>Peso</span><strong id="resultWeight">—</strong></div>
           <div><span>Altura</span><strong id="resultHeight">—</strong></div>
-          <div><span>Escore-z</span><strong id="resultZ">—</strong><small>IMC por idade</small></div>
+          <div id="resultZRow"><span>Escore-z</span><strong id="resultZ">—</strong><small>IMC por idade</small></div>
         </div>
 
         <div class="classification-panel">
           <div class="classification-icon" aria-hidden="true">◎</div>
-          <div><small>Classificação na curva de crescimento</small><h3 id="resultClassification">—</h3><p id="resultMessage">—</p></div>
+          <div><small id="classificationContextLabel">Classificação na curva de crescimento</small><h3 id="resultClassification">—</h3><p id="resultMessage">—</p></div>
         </div>
 
-        <div class="z-chart" aria-labelledby="chart-title">
+        <div class="z-chart" id="zChartSection" aria-labelledby="chart-title">
           <div class="chart-heading"><div><h3 id="chart-title">Onde o resultado aparece na curva</h3><p>Representação educativa do escore-z calculado.</p></div><span id="chartZBadge">z = —</span></div>
           <div class="z-scale-scroll" tabindex="0" aria-label="Régua horizontal de classificação por escore-z">
             <div class="z-scale" id="zScale">
@@ -215,7 +216,7 @@
     </section>
 
     <section class="notice-section" aria-label="Aviso educativo importante">
-      <div class="notice-card"><span class="notice-icon" aria-hidden="true">!</span><div><h2>Importante: esta ferramenta não faz diagnóstico</h2><p>Esta calculadora tem finalidade exclusivamente educativa. O IMC é um indicador de triagem e não fornece diagnóstico. A avaliação da saúde de crianças e adolescentes deve considerar crescimento, desenvolvimento, composição corporal, alimentação, atividade física, condições clínicas e contexto familiar. Procure um profissional de saúde para uma avaliação individual.</p></div></div>
+      <div class="notice-card"><span class="notice-icon" aria-hidden="true">!</span><div><h2>Importante: esta ferramenta não faz diagnóstico</h2><p>Esta calculadora tem finalidade exclusivamente educativa. O IMC é um indicador de triagem e não fornece diagnóstico. Em crianças e adolescentes (5 a 19 anos), a avaliação da saúde deve considerar crescimento, desenvolvimento, composição corporal, alimentação, atividade física, condições clínicas e contexto familiar. Em adultos, o IMC também não mede diretamente gordura corporal ou saúde clínica. Procure um profissional de saúde para uma avaliação individual.</p></div></div>
     </section>
   </main>
 

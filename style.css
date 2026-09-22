@@ -157,7 +157,11 @@ a { color: inherit; }
 .result-heading { padding: 0 0 30px; display: flex; align-items: center; justify-content: space-between; gap: 30px; border-bottom: 1px solid var(--line); }
 .result-eyebrow { margin-bottom: 10px; color: var(--green-600); }
 .result-heading h2 { margin: 0; color: var(--navy-900); font-size: 38px; line-height: 1; }
-.result-heading p:last-child { margin: 8px 0 0; color: var(--muted); }
+#resultName { margin: 8px 0 0; color: var(--muted); }
+.mode-badge { display: inline-flex; align-items: center; margin: 10px 0 0; padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 800; letter-spacing: .01em; width: fit-content; }
+.mode-badge:empty { display: none; }
+.mode-badge.mode-child { color: var(--green-600); background: var(--green-100); }
+.mode-badge.mode-adult { color: var(--blue-600); background: var(--blue-100); }
 .result-bmi { min-width: 185px; padding: 17px 20px; border-radius: 18px; text-align: right; color: var(--white); background: linear-gradient(135deg, var(--blue-600), var(--navy-800)); }
 .result-bmi small, .result-bmi strong { display: block; }
 .result-bmi small { color: #cfe9fa; font-size: 12px; }

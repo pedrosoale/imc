@@ -103,7 +103,33 @@ test("aceita a idade máxima de 228 meses", () => {
 });
 
 test("rejeita idade abaixo do mínimo", () => assert.equal(calc.validate({ ...validBase, birthDate: "2019-09-15" }).valid, false));
-test("rejeita idade acima do máximo", () => assert.equal(calc.validate({ ...validBase, birthDate: "2005-07-15" }).valid, false));
+
+test("aceita idade acima de 228 meses como avaliação adulta", () => {
+  const result = calc.validate({ ...validBase, birthDate: "2005-07-15" });
+  assert.equal(result.valid, true);
+  assert.equal(result.age.totalMonths, 229);
+  assert.equal(calc.isAdultAge(result.age.totalMonths), true);
+});
+
+test("rejeita idade acima do limite de plausibilidade", () => assert.equal(calc.validate({ ...validBase, birthDate: "1880-08-15" }).valid, false));
+
+test("classifica IMC de adultos pelas faixas padrão da OMS", () => {
+  assert.equal(calc.classifyAdultBmi(18.4).key, "underweight");
+  assert.equal(calc.classifyAdultBmi(18.5).key, "normal");
+  assert.equal(calc.classifyAdultBmi(24.9).key, "normal");
+  assert.equal(calc.classifyAdultBmi(25).key, "overweight");
+  assert.equal(calc.classifyAdultBmi(29.9).key, "overweight");
+  assert.equal(calc.classifyAdultBmi(30).key, "obesityI");
+  assert.equal(calc.classifyAdultBmi(34.9).key, "obesityI");
+  assert.equal(calc.classifyAdultBmi(35).key, "obesityII");
+  assert.equal(calc.classifyAdultBmi(39.9).key, "obesityII");
+  assert.equal(calc.classifyAdultBmi(40).key, "obesityIII");
+});
+
+test("não usa escore-z para classificar adultos", () => {
+  assert.equal(calc.isAdultAge(228), false);
+  assert.equal(calc.isAdultAge(229), true);
+});
 test("rejeita campos obrigatórios vazios", () => assert.equal(calc.validate({ sex: "", birthDate: "", assessmentDate: "", weight: "", height: "", heightUnit: "cm" }).valid, false));
 test("rejeita nascimento posterior à avaliação", () => assert.match(calc.validate({ ...validBase, birthDate: "2025-01-01" }).errors.birthDate, /posterior/));
 test("rejeita medidas fora de limites plausíveis", () => assert.equal(calc.validate({ ...validBase, weight: "900", height: "40" }).valid, false));
@@ -119,7 +145,7 @@ test("versão única incorpora CSS, dados e lógica", () => {
   assert.match(single, /<style>[\s\S]*:root/);
   assert.match(single, /root\.WHO_LMS_DATA=/);
   assert.match(single, /function calculateWhoZScore/);
-  assert.doesNotMatch(single, /<(?:script|link)[^>]+(?:src|href)="/i);
+  assert.doesNotMatch(single, /<(?:script|link)[^>]+(?:src|href)="(?!data:)/i);
 });
 
 let failures = 0;
