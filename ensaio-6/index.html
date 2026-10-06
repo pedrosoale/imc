@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="imc-pesquisa-id" content="ensaio-6">
+  <meta name="theme-color" content="#092b4c">
+  <meta name="description" content="Calculadora educativa de IMC para crianças, adolescentes e adultos: curvas por idade e sexo da OMS até 19 anos e faixas padrão da OMS para adultos.">
+  <title>O Peso da Estatística na Saúde — ENSAIO (dados fictícios)</title>
+  <link rel="icon" type="image/png" href="logo-escola.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#calculadora">Ir para a calculadora</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#inicio" aria-label="Voltar ao início">
+        <img class="brand-logo" src="logo-escola.png" width="129" height="129" alt="">
+        <span><strong>Feira do Conhecimento</strong><small>Escola Esther Vianna Bologna</small></span>
+      </a>
+      <button class="presentation-button" id="presentationButton" type="button" aria-label="Ativar modo apresentação em tela cheia">
+        <span aria-hidden="true">⛶</span> Modo apresentação
+      </button>
+    </div>
+  </header>
+
+  <div class="collect-bar" id="coletaBar" hidden>
+    <span class="collect-dot" aria-hidden="true"></span>
+    <span id="coletaBarTexto"></span>
+    <a href="#areaOperador" id="coletaBarLink">Área do operador</a>
+  </div>
+
+  <main id="inicio">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-shape hero-shape-one" aria-hidden="true"></div>
+      <div class="hero-shape hero-shape-two" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> Matemática • Estatística • Saúde</p>
+          <h1 id="hero-title">O Peso da <em>Estatística</em> na Saúde</h1>
+          <p class="hero-subtitle">Calculadora educativa de IMC para crianças, adolescentes e adultos</p>
+          <p class="hero-description">Descubra como Matemática, crescimento e saúde podem ser analisados por meio dos dados.</p>
+          <a class="hero-cta" href="#calculadora">Começar avaliação <span aria-hidden="true">↓</span></a>
+        </div>
+
+        <div class="hero-visual" aria-label="Ilustração educativa com gráfico, régua e símbolos matemáticos">
+          <div class="visual-card">
+            <div class="visual-topline"><span>IMC por idade</span><span class="live-dot">OMS 2007</span></div>
+            <div class="chart" aria-hidden="true">
+              <span style="--h:38%"></span><span style="--h:57%"></span><span style="--h:47%"></span><span style="--h:78%"></span><span style="--h:66%"></span>
+              <i class="chart-curve"></i>
+              <b class="plot-dot dot-one"></b><b class="plot-dot dot-two"></b><b class="plot-dot dot-three"></b>
+            </div>
+            <div class="visual-formula"><small>Índice de Massa Corporal</small><strong>IMC = peso ÷ altura²</strong></div>
+          </div>
+          <span class="floating-symbol symbol-one" aria-hidden="true">x²</span>
+          <span class="floating-symbol symbol-two" aria-hidden="true">%</span>
+          <span class="floating-symbol symbol-three" aria-hidden="true">+1σ</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="education-strip" aria-label="Dados utilizados no cálculo">
+      <div class="education-grid">
+        <article class="education-card">
+          <span class="education-icon scale-icon" aria-hidden="true">kg</span>
+          <div><h2>Peso</h2><p>Medido em quilogramas.</p></div>
+          <span class="step-number">01</span>
+        </article>
+        <article class="education-card">
+          <span class="education-icon ruler-icon" aria-hidden="true">↔</span>
+          <div><h2>Altura</h2><p>Utilizada ao quadrado no cálculo.</p></div>
+          <span class="step-number">02</span>
+        </article>
+        <article class="education-card">
+          <span class="education-icon curve-icon" aria-hidden="true">⌁</span>
+          <div><h2>Idade e sexo</h2><p>Necessários para interpretar a curva de crescimento.</p></div>
+          <span class="step-number">03</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="calculator-section" id="calculadora" aria-labelledby="calculator-title">
+      <div class="section-heading">
+        <p class="eyebrow dark"><span></span> Sua vez de calcular</p>
+        <h2 id="calculator-title">Vamos aos dados?</h2>
+        <p>Preencha com atenção. Os campos marcados com <span aria-hidden="true">*</span><span class="sr-only">asterisco</span> são obrigatórios.</p>
+      </div>
+
+      <div class="privacy-badge"><span aria-hidden="true">✓</span><strong>Seus dados não são salvos</strong><small>O cálculo acontece somente neste dispositivo.</small></div>
+
+      <form class="calculator-card" id="imcForm" novalidate>
+        <div class="form-progress" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="global-error" id="globalError" role="alert" tabindex="-1" hidden></div>
+
+        <fieldset class="form-block">
+          <legend><span>1</span> Identificação <small>opcional</small></legend>
+          <div class="field full-field">
+            <label for="name">Nome, apelido ou código — opcional</label>
+            <input id="name" name="name" type="text" maxlength="60" autocomplete="off" placeholder="Ex.: Participante 12">
+            <p class="field-hint">Para preservar a privacidade, você pode utilizar somente um código ou deixar este campo vazio.</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-block">
+          <legend><span>2</span> Curva de crescimento <abbr title="campo obrigatório">*</abbr></legend>
+          <p class="fieldset-explanation">Para idades entre 5 e 19 anos, o dado seleciona a curva de crescimento da OMS, que é diferente para meninos e meninas. A partir de 229 meses (19 anos e 1 mês), o IMC é classificado pelas faixas padrão da OMS para adultos, iguais para os dois sexos.</p>
+          <div class="sex-options" id="sexGroup">
+            <label class="choice-card"><input type="radio" name="sex" value="male"><span class="choice-dot"></span><span><strong>Masculino</strong><small>Curva para meninos</small></span></label>
+            <label class="choice-card"><input type="radio" name="sex" value="female"><span class="choice-dot"></span><span><strong>Feminino</strong><small>Curva para meninas</small></span></label>
+          </div>
+          <p class="field-error" id="sexError"></p>
+        </fieldset>
+
+        <fieldset class="form-block">
+          <legend><span>3</span> Datas <abbr title="campos obrigatórios">*</abbr></legend>
+          <div class="form-grid">
+            <div class="field">
+              <label for="birthDate">Data de nascimento</label>
+              <input id="birthDate" name="birthDate" type="date" required aria-describedby="birthDateError">
+              <p class="field-error" id="birthDateError"></p>
+            </div>
+            <div class="field">
+              <label for="assessmentDate">Data da avaliação</label>
+              <input id="assessmentDate" name="assessmentDate" type="date" required aria-describedby="assessmentDateError">
+              <p class="field-error" id="assessmentDateError"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-block">
+          <legend><span>4</span> Medidas <abbr title="campos obrigatórios">*</abbr></legend>
+          <div class="form-grid measures-grid">
+            <div class="field">
+              <label for="weight">Peso</label>
+              <div class="input-with-unit"><input id="weight" name="weight" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex.: 42,5" aria-describedby="weightHint weightError"><span>kg</span></div>
+              <p class="field-hint" id="weightHint">Aceita vírgula ou ponto.</p>
+              <p class="field-error" id="weightError"></p>
+            </div>
+            <div class="field">
+              <label for="height">Altura</label>
+              <div class="height-input-row">
+                <input id="height" name="height" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex.: 145" aria-describedby="heightError">
+                <select id="heightUnit" name="heightUnit" aria-label="Unidade da altura">
+                  <option value="cm">centímetros</option>
+                  <option value="m">metros</option>
+                </select>
+              </div>
+              <p class="field-error" id="heightError"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button class="primary-button" type="submit">Calcular meu IMC <span aria-hidden="true">→</span></button>
+          <button class="secondary-button" id="clearButton" type="button"><span aria-hidden="true">↻</span> Limpar dados</button>
+        </div>
+        <p class="form-privacy"><span aria-hidden="true">◉</span> Nenhuma informação é enviada, armazenada ou adicionada a um histórico.</p>
+      </form>
+    </section>
+
+    <section class="result-section" id="resultado" aria-labelledby="result-title" aria-live="polite" hidden>
+      <div class="result-card" id="resultCard">
+        <div class="result-heading">
+          <div><p class="eyebrow result-eyebrow"><span></span> Análise concluída</p><h2 id="result-title">Seu resultado</h2><p id="resultName"></p><p class="mode-badge" id="resultModeBadge"></p></div>
+          <div class="result-bmi"><small>IMC calculado</small><strong id="resultBmi">—</strong><span>kg/m²</span></div>
+        </div>
+
+        <div class="result-summary">
+          <div><span>Idade</span><strong id="resultAge">—</strong><small id="resultMonths">—</small></div>
+          <div><span>Peso</span><strong id="resultWeight">—</strong></div>
+          <div><span>Altura</span><strong id="resultHeight">—</strong></div>
+          <div id="resultZRow"><span>Escore-z</span><strong id="resultZ">—</strong><small>IMC por idade</small></div>
+        </div>
+
+        <div class="classification-panel">
+          <div class="classification-icon" aria-hidden="true">◎</div>
+          <div><small id="classificationContextLabel">Classificação na curva de crescimento</small><h3 id="resultClassification">—</h3><p id="resultMessage">—</p></div>
+        </div>
+
+        <div class="z-chart" id="zChartSection" aria-labelledby="chart-title">
+          <div class="chart-heading"><div><h3 id="chart-title">Onde o resultado aparece na curva</h3><p>Representação educativa do escore-z calculado.</p></div><span id="chartZBadge">z = —</span></div>
+          <div class="z-scale-scroll" tabindex="0" aria-label="Régua horizontal de classificação por escore-z">
+            <div class="z-scale" id="zScale">
+              <div class="z-marker" id="zMarker"><span id="markerLabel">Você está aqui</span><i></i></div>
+              <div class="z-bands">
+                <span class="band severe-thin">Magreza<br>acentuada</span>
+                <span class="band thin">Magreza</span>
+                <span class="band adequate">Faixa adequada</span>
+                <span class="band overweight">Sobrepeso</span>
+                <span class="band obesity">Obesidade</span>
+                <span class="band severe-obesity">Obesidade<br>grave</span>
+              </div>
+              <div class="z-ticks"><span style="left:12.5%">−3</span><span style="left:25%">−2</span><span style="left:62.5%">+1</span><span style="left:75%">+2</span><span style="left:87.5%">+3</span></div>
+            </div>
+          </div>
+          <p class="chart-note"><span aria-hidden="true">i</span> O cálculo usa parâmetros LMS oficiais incorporados ao sistema. O gráfico é uma representação educativa.</p>
+        </div>
+
+        <div class="result-guidance"><strong>Uma medida é um ponto da história, não a história inteira.</strong><p>Observe o crescimento ao longo do tempo e converse com um profissional de saúde quando houver dúvidas.</p></div>
+        <div class="participation-box" id="participacaoBox" hidden>
+          <h3>Pesquisa da feira <small>— participação voluntária</small></h3>
+          <p id="participacaoAviso"></p>
+          <button class="primary-button" id="registrarButton" type="button">Registrar minha participação</button>
+          <p class="participation-status" id="participacaoStatus" role="status" aria-live="polite"></p>
+          <div class="participation-alert" id="participacaoAlerta" role="alert" hidden>
+            <strong id="participacaoAlertaTexto"></strong>
+            <div class="operator-row">
+              <button class="secondary-button" id="alertaTentarButton" type="button" hidden>Tentar salvar novamente</button>
+              <button class="secondary-button" id="alertaBackupButton" type="button">Baixar backup agora</button>
+            </div>
+          </div>
+        </div>
+        <div class="result-actions">
+          <button class="primary-button" id="newAssessmentButton" type="button">Iniciar nova avaliação <span aria-hidden="true">↻</span></button>
+          <button class="secondary-button" id="backToFormButton" type="button">Rever dados</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-section" aria-labelledby="how-title">
+      <div class="how-inner">
+        <div class="how-copy">
+          <p class="eyebrow dark"><span></span> Entenda o cálculo</p>
+          <h2 id="how-title">Da medida à informação</h2>
+          <p>Primeiro dividimos o peso pela altura ao quadrado. Depois comparamos o resultado com crianças ou adolescentes da mesma idade e sexo, utilizando uma curva de crescimento.</p>
+          <div class="formula-card"><span>Fórmula do IMC</span><strong>IMC = <span class="fraction"><i>peso (kg)</i><i>altura (m) × altura (m)</i></span></strong></div>
+        </div>
+        <ol class="calculation-steps">
+          <li><span>1</span><div><strong>Transforme a altura</strong><p>145 cm se transforma em 1,45 m.</p></div></li>
+          <li><span>2</span><div><strong>Calcule o IMC</strong><p>42,5 ÷ (1,45 × 1,45) = 20,2 kg/m².</p></div></li>
+          <li><span>3</span><div><strong>Consulte a curva</strong><p>O resultado é comparado por idade em meses e sexo.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="notice-section" aria-label="Aviso educativo importante">
+      <div class="notice-card"><span class="notice-icon" aria-hidden="true">!</span><div><h2>Importante: esta ferramenta não faz diagnóstico</h2><p>Esta calculadora tem finalidade exclusivamente educativa. O IMC é um indicador de triagem e não fornece diagnóstico. Em crianças e adolescentes (5 a 19 anos), a avaliação da saúde deve considerar crescimento, desenvolvimento, composição corporal, alimentação, atividade física, condições clínicas e contexto familiar. Em adultos, o IMC também não mede diretamente gordura corporal ou saúde clínica. Procure um profissional de saúde para uma avaliação individual.</p></div></div>
+    </section>
+
+    <section class="operator-section" aria-label="Área do operador da pesquisa">
+      <details id="areaOperador">
+        <summary>Área do operador — pesquisa da feira</summary>
+        <div class="operator-body">
+          <p class="operator-lead">Uso do operador. A coleta é opcional e os registros ficam neste computador e neste navegador; o envio para uma planilha privada do responsável é outra etapa opcional, descrita mais abaixo. O aviso exibido aos participantes não substitui autorização institucional nem o consentimento de responsáveis: confirme esses procedimentos com a escola antes de coletar dados reais.</p>
+          <div class="operator-row">
+            <button class="secondary-button" id="coletaToggle" type="button">Ativar modo coleta</button>
+            <span id="coletaToggleEstado"></span>
+          </div>
+          <p id="operadorResumo"></p>
+          <div class="participation-alert" id="operadorAlerta" role="alert" hidden>
+            <strong id="operadorAlertaTexto"></strong>
+            <div class="operator-row">
+              <button class="secondary-button" id="tentarSalvarButton" type="button" hidden>Tentar salvar novamente</button>
+              <button class="secondary-button" id="conflitosButton" type="button" hidden>Baixar registros em conflito</button>
+              <button class="secondary-button" id="baseBrutaButton" type="button" hidden>Baixar texto da base ilegível</button>
+              <button class="secondary-button" id="quarentenaButton" type="button" hidden>Preservar e iniciar base nova</button>
+            </div>
+          </div>
+
+          <h3>Painel estatístico</h3>
+          <div class="operator-row">
+            <a class="secondary-button" id="verPainelLink" href="#painel">Ver painel nesta janela</a>
+            <button class="secondary-button" id="abrirPainelButton" type="button">Abrir painel em outra janela</button>
+          </div>
+          <p class="operator-hint">O painel mostra somente estatísticas agregadas, sem registros individuais, e serve para projeção. Em outra janela, ele lê a mesma base deste navegador e se atualiza sozinho; registros que estiverem só na memória de uma janela não aparecem nas outras.</p>
+
+          <h3>Envio para a planilha do responsável (opcional)</h3>
+          <p class="operator-hint" id="envioExplicacao">Os registros continuam sendo salvos primeiro neste computador. Se você ativar o envio, uma fila guarda apenas o estado de cada registro (aguardando, enviado ou com problema) e tenta enviá-lo à planilha privada do responsável. “Salvo na planilha” só aparece depois de o serviço responder de forma legível e devolver exatamente o mesmo registro. A chave de coleta fica somente na memória desta página: ao recarregar, é preciso digitá-la de novo. Usar somente em computador de confiança e com autorização da escola.</p>
+          <label for="envioUrl">Endereço do serviço (termina em /exec; não é segredo)</label>
+          <input type="text" id="envioUrl" autocomplete="off" spellcheck="false" inputmode="url">
+          <label for="envioChave">Chave de coleta (só acrescenta registros; nunca é gravada)</label>
+          <input type="password" id="envioChave" autocomplete="off" spellcheck="false">
+          <div class="operator-row">
+            <button class="primary-button" id="envioAtivar" type="button">Ativar envio nesta janela</button>
+            <button class="secondary-button" id="envioAgora" type="button" hidden>Tentar enviar agora</button>
+            <button class="secondary-button" id="envioPausar" type="button" hidden>Pausar envio</button>
+            <button class="secondary-button" id="envioRetomar" type="button" hidden>Retomar envio</button>
+            <button class="secondary-button" id="envioIntervencao" type="button" hidden>Reenviar itens com conflito ou rejeição</button>
+            <button class="secondary-button" id="envioDesativar" type="button" hidden>Parar o envio e esquecer a chave</button>
+            <button class="secondary-button" id="envioRemoverDestino" type="button" hidden>Remover o endereço do serviço</button>
+          </div>
+          <p id="envioResumo" role="status"></p>
+          <div class="participation-alert" id="envioAlerta" role="alert" hidden>
+            <strong id="envioAlertaTexto"></strong>
+            <div class="operator-row"><button class="secondary-button" id="filaQuarentenaButton" type="button" hidden>Preservar a fila ilegível e iniciar fila nova</button></div>
+          </div>
+          <details id="envioDiagnostico"><summary>Diagnóstico das últimas tentativas (sem dados dos registros)</summary><ol id="envioDiagLista"></ol></details>
+
+          <h3>Conferir com a planilha (restaurar)</h3>
+          <p class="operator-hint">Usa a chave de LEITURA, que deve ser diferente da chave de coleta e é descartada ao terminar. Primeiro mostra uma prévia; nada é alterado até você aplicar. Registros com o mesmo ID e conteúdo diferente são preservados para revisão, sem sobrescrever. A verificação confere o conjunto de IDs, a quantidade e a validade de cada registro; o conteúdo só é comparado com os registros que também existem aqui. Aplicar a conferência exige que esta seja a janela operadora do envio (ative o envio antes). Um arquivo de backup, sozinho, nunca prova que os registros estão na planilha.</p>
+          <label for="envioChaveLeitura">Chave de leitura (nunca é gravada)</label>
+          <input type="password" id="envioChaveLeitura" autocomplete="off" spellcheck="false">
+          <div class="operator-row"><button class="secondary-button" id="conciliarIniciar" type="button">Ler a planilha e preparar a prévia</button></div>
+          <div id="conciliarPrevia" hidden>
+            <p id="conciliarResumo"></p>
+            <div class="operator-row">
+              <button class="primary-button" id="conciliarAplicar" type="button">Aplicar</button>
+              <button class="secondary-button" id="conciliarRelatorio" type="button" hidden>Baixar divergências para revisão</button>
+              <button class="secondary-button" id="conciliarCancelar" type="button">Cancelar</button>
+            </div>
+          </div>
+
+          <h3>Backup e exportação</h3>
+          <div class="operator-row">
+            <button class="secondary-button" id="baixarBackupButton" type="button">Baixar backup (JSON)</button>
+            <button class="secondary-button" id="baixarCsvButton" type="button">Exportar para análise (CSV)</button>
+          </div>
+          <p class="operator-hint">O backup JSON serve para restaurar. O CSV (UTF-8, separador “;”, decimal com vírgula) serve para análise em planilhas. Nenhum dos dois contém nome, data de nascimento, chaves ou o endereço do serviço. O backup pode trazer os estados de envio que este navegador conhecia, apenas como informação: ao importar, todos são reavaliados.</p>
+
+          <h3>Importar backup</h3>
+          <label for="importarArquivo">Arquivo de backup (.json)</label>
+          <input type="file" id="importarArquivo" accept=".json,application/json">
+          <div id="importarPrevia" hidden>
+            <p id="importarResumo"></p>
+            <ul id="importarErros"></ul>
+            <div class="operator-row">
+              <button class="primary-button" id="importarAplicar" type="button">Aplicar importação</button>
+              <button class="secondary-button" id="importarCancelar" type="button">Cancelar</button>
+            </div>
+          </div>
+
+          <h3>Excluir pesquisa</h3>
+          <button class="danger-button" id="excluirIniciar" type="button">Excluir pesquisa…</button>
+          <div id="excluirConfirmacao" hidden>
+            <p id="excluirResumo"></p>
+            <label for="excluirDigitar">Para confirmar, digite <strong id="excluirSurveyId"></strong></label>
+            <input id="excluirDigitar" type="text" autocomplete="off" spellcheck="false">
+            <div class="operator-row">
+              <button class="danger-button" id="excluirConfirmar" type="button" disabled>Excluir definitivamente</button>
+              <button class="secondary-button" id="excluirCancelar" type="button">Cancelar</button>
+            </div>
+          </div>
+          <p id="operadorMensagem" role="status" aria-live="polite"></p>
+        </div>
+      </details>
+    </section>
+
+    <section class="panel-section" id="painelSection" aria-labelledby="painelTitulo" hidden>
+      <div class="panel-inner">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow dark"><span></span> Pesquisa da feira · amostra voluntária</p>
+            <h2 id="painelTitulo" tabindex="-1">O que os participantes nos mostram</h2>
+            <p class="panel-lead">Estes números descrevem <strong>somente quem participou e aceitou registrar</strong> a avaliação. Não representam todos os estudantes da rede municipal.</p>
+          </div>
+          <a class="panel-back" id="painelVoltar" href="#calculadora">Voltar à calculadora</a>
+        </div>
+
+        <div class="panel-filter">
+          <label for="painelFaixa">Faixa etária (anos completos)</label>
+          <select id="painelFaixa"></select>
+          <p class="panel-count" id="painelContagem"></p>
+        </div>
+        <div class="panel-notices" id="painelAvisos" hidden></div>
+        <p class="panel-sync" id="painelEnvio" role="status" aria-live="polite"></p>
+
+        <div id="painelConteudo"></div>
+
+        <section class="panel-block panel-learn" aria-labelledby="aprender-t">
+          <h3 id="aprender-t">Como ler estes números</h3>
+          <dl>
+            <dt>Média</dt><dd>Soma de todos os valores dividida pela quantidade. Considera todos os dados e, por isso, é sensível a valores extremos.</dd>
+            <dt>Mediana</dt><dd>O valor do meio quando os dados estão em ordem. Metade dos participantes fica abaixo e metade acima (com quantidade par, usamos a média dos dois valores do meio).</dd>
+            <dt>Moda</dt><dd>O valor que mais se repete. Pode não existir (nenhum valor se repete), pode haver mais de uma ou todos os valores podem ser iguais. A moda <em>exata</em> usa os valores como foram registrados; a <em>classe modal</em> do gráfico é a barra mais alta e depende dos intervalos escolhidos.</dd>
+            <dt>Limites</dt><dd>Média, mediana e moda resumem, mas não mostram toda a distribuição: é preciso olhar o gráfico. Os participantes foram voluntários que passaram pelo espaço; não dá para generalizar para outros grupos.</dd>
+            <dt>IMC médio</dt><dd>É só uma conta estatística entre participantes de idades diferentes. Não classifica clinicamente o grupo nem diz se ele está saudável.</dd>
+          </dl>
+        </section>
+
+        <section class="panel-block panel-example" aria-labelledby="exemplo-t">
+          <h3 id="exemplo-t">Média e mediana diante de um valor extremo</h3>
+          <div id="painelExemplo"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>Feira do Conhecimento</strong><p>Escola Esther Vianna Bologna</p></div>
+      <p>Projeto interdisciplinar de <strong>Matemática, Ciências e Educação Física</strong></p>
+      <p class="footer-reference">Referência: curvas de crescimento da Organização Mundial da Saúde — OMS 2007. Finalidade educativa.</p>
+    </div>
+  </footer>
+
+  <script src="who-data.js"></script>
+  <script src="script.js"></script>
+  <script src="pesquisa-dados.js"></script>
+  <script src="pesquisa-armazenamento.js"></script>
+  <script src="pesquisa-cliente.js"></script>
+  <script src="pesquisa-transporte.js"></script>
+  <script src="pesquisa-sincronizacao.js"></script>
+  <script src="pesquisa-projecao.js"></script>
+  <script src="pesquisa-candidato.js"></script>
+  <script src="pesquisa-estatistica.js"></script>
+  <script src="pesquisa-painel.js"></script>
+  <script src="pesquisa-ui.js"></script>
+</body>
+</html>
