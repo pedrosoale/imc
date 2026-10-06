@@ -437,7 +437,7 @@
     /** Liga o envio automático nesta janela (exige destino, chave e licença de operador). */
     function activate() {
       const gate = { ...canSend(true) };
-      if (!gate.ok && gate.reason !== "nao-operador") return { ok: false, reason: gate.reason };
+      if (!gate.ok && !["nao-operador", "pausado", "bloqueado"].includes(gate.reason)) return { ok: false, reason: gate.reason }; // pausa e bloqueio não impedem informar a chave nova
       const lease = acquire();
       if (!lease.ok) return { ok: false, reason: lease.holderActive ? "outra-janela-opera" : "licenca-indisponivel" };
       if (queueStatus === "ok" || queueStatus === "empty") {

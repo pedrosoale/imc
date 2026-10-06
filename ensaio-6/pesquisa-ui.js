@@ -458,7 +458,7 @@
     const c = s.counts;
     if (!urlPrefilled && sync.getEndpoint()) { $("envioUrl").value = sync.getEndpoint(); urlPrefilled = true; }
 
-    $("envioAtivar").hidden = s.active;
+    $("envioAtivar").hidden = s.active && s.hasKey; // sem chave (ex.: recusada pelo servidor) o botão continua disponível para informar a chave nova
     $("envioAgora").hidden = !s.active;
     $("envioPausar").hidden = !(s.active && !s.paused);
     $("envioRetomar").hidden = !(s.paused || s.blocked);
