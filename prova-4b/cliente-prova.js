@@ -54,8 +54,10 @@
     async function post(body) {
       const controller = typeof AbortController === "function" ? new AbortController() : null;
       let timer = null;
+      let timedOut = false; // o AbortError provocado pelo próprio prazo é timeout, não falha de rede
       const deadline = new Promise((_, reject) => {
         timer = setTimeout(() => {
+          timedOut = true;
           if (controller) { try { controller.abort(); } catch (_) { /* ignorado */ } }
           reject(Object.assign(new Error("timeout"), { isTimeout: true }));
         }, timeoutMs);
@@ -76,7 +78,7 @@
         if (!response.ok) return { ok: false, kind: "http", status: response.status };
         let text;
         try { text = await Promise.race([response.text(), deadline]); } catch (error) {
-          if (error && error.isTimeout) throw error;
+          if ((error && error.isTimeout) || timedOut) throw error;
           return { ok: false, kind: "leitura" };
         }
         let data;
@@ -85,7 +87,7 @@
         if (!data.ok) return { ok: false, kind: "servidor", error: data.error || null };
         return { ok: true, data };
       } catch (error) {
-        if (error && error.isTimeout) {
+        if ((error && error.isTimeout) || timedOut) {
           discardBody(response);
           return { ok: false, kind: "timeout" };
         }
