@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Prova de integração — Sheets (teste)</title>
+  <style>
+    body { font: 16px/1.5 system-ui, sans-serif; max-width: 920px; margin: 24px auto; padding: 0 16px; color: #14212e; }
+    fieldset { margin: 14px 0; padding: 12px 16px; }
+    label { display: block; margin: 8px 0 2px; font-weight: 700; }
+    input { width: 100%; padding: 8px; font: inherit; box-sizing: border-box; }
+    button { margin: 6px 6px 0 0; padding: 8px 12px; font: inherit; }
+    pre { background: #f2f5f8; padding: 12px; overflow: auto; max-height: 460px; white-space: pre-wrap; }
+    .aviso { padding: 10px 14px; border-left: 4px solid #bc3e4d; background: #fff0f2; }
+  </style>
+</head>
+<body>
+  <h1>Prova de integração com Google Sheets</h1>
+  <p class="aviso"><strong>Somente dados fictícios e planilha de TESTE.</strong> Página temporária do teste externo (Rodada 4B). Não faz parte da calculadora, não é linkada por ela, não guarda URL nem chaves (nada vai para o armazenamento do navegador) e deve ser removida da publicação ao final do teste.</p>
+  <p>Origem desta página: <strong id="origem"></strong> · <code>unhandledrejection</code> capturados: <strong id="unhandled">0</strong></p>
+
+  <fieldset>
+    <legend>Conexão (digitada a cada uso)</legend>
+    <label for="url">URL do Web App (termina em /exec)</label>
+    <input id="url" type="url" autocomplete="off" spellcheck="false">
+    <label for="chaveColeta">Chave de COLETA (só acrescenta)</label>
+    <input id="chaveColeta" type="password" autocomplete="off" spellcheck="false">
+    <label for="chaveLeitura">Chave de LEITURA (dono)</label>
+    <input id="chaveLeitura" type="password" autocomplete="off" spellcheck="false">
+    <label for="surveyId">Identificador da pesquisa de teste</label>
+    <input id="surveyId" type="text" value="teste-integracao" autocomplete="off">
+  </fieldset>
+
+  <fieldset>
+    <legend>Roteiro</legend>
+    <button id="bPing">1. Ping (coleta e leitura)</button>
+    <button id="bNovo">2. Gerar registro fictício</button>
+    <button id="bEnviar">3. Enviar registro</button>
+    <button id="bReenviar">4. Reenviar o MESMO registro</button>
+    <button id="bPerder">5. Enviar descartando a resposta</button>
+    <button id="bConflito">6. Mesmo ID, conteúdo diferente</button>
+    <button id="bSimultaneo">7. Envio simultâneo do mesmo ID</button>
+    <button id="bChaveInvalida">8. Chave inválida</button>
+    <button id="bColetaLe">9. Chave de coleta tentando ler</button>
+    <button id="bLeituraGrava">10. Chave de leitura tentando acrescentar</button>
+    <button id="bResumo">11. Resumo (leitura)</button>
+    <button id="bListar">12. Listar (leitura)</button>
+    <button id="bRestaurar">13. Restaurar tudo (verificado)</button>
+    <button id="bTimeout">14. Corpo da resposta travado (timeout)</button>
+    <button id="bCopiar">Copiar relatório sanitizado</button>
+  </fieldset>
+
+  <h2>Resultado</h2>
+  <pre id="saida" aria-live="polite">Aguardando.</pre>
+
+  <script src="cliente-prova.js"></script>
+  <script src="prova-sheets.js"></script>
+</body>
+</html>
